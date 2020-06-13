@@ -1,0 +1,254 @@
+{
+	"info": {
+		"_postman_id": "9ba864fa-08b3-424a-8956-966401607d9e",
+		"name": "MVVM Universal",
+		"description": "Test WebAPIs MVVM Uniersal",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Valid Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"User\":\"admin\",\n\t\"Password\":\"admin\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44328/Security/Login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44328",
+					"path": [
+						"Security",
+						"Login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Blocked Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"User\":\"blocked\",\n\t\"Password\":\"blocked\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44328/Security/Login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44328",
+					"path": [
+						"Security",
+						"Login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"User\":\"user\",\n\t\"Password\":\"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44328/Security/Login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44328",
+					"path": [
+						"Security",
+						"Login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetSections",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44328/crud/GetSections",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44328",
+					"path": [
+						"crud",
+						"GetSections"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddSection",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 11,\n    \"name\": \"Section 11\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44328/crud/AddSection",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44328",
+					"path": [
+						"crud",
+						"AddSection"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteSection",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44328/crud/DeleteSection?id=1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44328",
+					"path": [
+						"crud",
+						"DeleteSection"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetItems",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44328/crud/GetItems?idSection=3",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44328",
+					"path": [
+						"crud",
+						"GetItems"
+					],
+					"query": [
+						{
+							"key": "idSection",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddItem",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 51,\n    \"idSection\": 3,\n    \"description\": \"Item 51\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44328/crud/AddItem",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44328",
+					"path": [
+						"crud",
+						"AddItem"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteItem",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44328/crud/DeleteItem?id=1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44328",
+					"path": [
+						"crud",
+						"DeleteItem"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

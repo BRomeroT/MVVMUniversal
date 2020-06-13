@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Model
 {
-    public class Section
+    public partial class Section
     {
         public Section()
         {

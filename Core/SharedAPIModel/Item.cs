@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SharedAPIModel
 {
-    public class Item
+    public partial class Item
     {
         public int Id { get; set; }
         public int IdSection { get; set; }

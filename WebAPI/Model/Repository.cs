@@ -33,8 +33,29 @@ namespace WebAPI.Model
                 }
                 Items.AddRange(newSection.Items);
             }
+
+            Credentials.Add(new Credential()
+            {
+                User="admin",
+                Password="admin",
+                Name="Administrator"
+            });
+            Credentials.Add(new Credential()
+            {
+                User="user",
+                Password="user",
+                Name="User general"
+            });
+            Credentials.Add(new Credential()
+            {
+                User = "blocked",
+                Password = "blocked",
+                Name = "Blocked user",
+                Active = false
+            });
         }
         public List<Section> Sections { get; set; } = new List<Section>();
         public List<Item> Items { get; set; } = new List<Item>();
+        public List<Credential> Credentials { get; set; } = new List<Credential>();
     }
 }

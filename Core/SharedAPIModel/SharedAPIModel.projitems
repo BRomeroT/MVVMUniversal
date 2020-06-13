@@ -9,6 +9,7 @@
     <Import_RootNamespace>SharedAPIModel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Credential.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Item.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Section.cs" />
   </ItemGroup>

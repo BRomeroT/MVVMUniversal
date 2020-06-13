@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using WebAPI.BL;
 using WebAPI.Model;
 
 namespace WebAPI
@@ -37,6 +38,8 @@ namespace WebAPI
               }));
 
             services.AddSingleton<Repository>();
+            services.AddTransient<SecurityBL>();
+            services.AddTransient<CrudBL>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +51,8 @@ namespace WebAPI
             }
 
             app.UseHttpsRedirection();
+
+            app.UseStatusCodePages();
 
             app.UseRouting();
 
