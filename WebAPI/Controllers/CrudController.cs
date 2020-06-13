@@ -12,7 +12,7 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CrudController : ControllerBase
     {
-        CrudBL crudBL;
+        readonly CrudBL crudBL;
         public CrudController(CrudBL crudBL) => this.crudBL = crudBL;
 
         [HttpGet("GetSections")]

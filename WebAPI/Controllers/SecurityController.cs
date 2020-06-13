@@ -13,7 +13,7 @@ namespace WebAPI.Controllers
     [ApiController]
     public class SecurityController : ControllerBase
     {
-        SecurityBL securityBL;
+        readonly SecurityBL securityBL;
         public SecurityController(SecurityBL securityBL) => this.securityBL = securityBL;
 
         [HttpPost("Login")]

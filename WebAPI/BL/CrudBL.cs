@@ -10,7 +10,7 @@ namespace WebAPI.BL
 {
     public class CrudBL
     {
-        Repository repository;
+        readonly Repository repository;
         public CrudBL(Repository repository) => this.repository = repository;
 
         public IEnumerable<Section> GetSections() => repository.Sections;

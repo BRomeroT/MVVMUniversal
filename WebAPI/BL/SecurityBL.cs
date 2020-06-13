@@ -9,7 +9,7 @@ namespace WebAPI.BL
 {
     public class SecurityBL
     {
-        Repository repository;
+        readonly Repository repository;
         public SecurityBL(Repository repository) => this.repository = repository;
 
         public (bool IsValid, string Name) ValidateUser(string user, string password)
