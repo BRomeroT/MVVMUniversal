@@ -19,8 +19,8 @@ namespace WebAPI.Controllers
         [HttpPost("Login")]
         public IActionResult Login(SharedAPIModel.Credential credential)
         {
-            var res = securityBL.ValidateUser(credential.User, credential.Password);
-            if (res.IsValid) return Ok(res.Name);
+            var (IsValid, Name) = securityBL.ValidateUser(credential.User, credential.Password);
+            if (IsValid) return Ok(Name);
             return Unauthorized(); //StatusCode(StatusCodes.Status401Unauthorized);
         }
     }
