@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Sysne.Core.OS
 {
+    /// <summary>
+    /// Allow register dependencies and their lifetime
+    /// </summary>
     public static class DependencyService
     {
         /// <summary>
