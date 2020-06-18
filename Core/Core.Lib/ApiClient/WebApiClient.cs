@@ -81,7 +81,7 @@ namespace Sysne.Core.ApiClient
         {
             try
             {
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
                 if (parameters.Length > 0)
                 {
                     sb.Append("?");
@@ -106,7 +106,7 @@ namespace Sysne.Core.ApiClient
         {
             try
             {
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
                 if (parameters.Length > 0)
                 {
                     sb.Append("?");
@@ -133,8 +133,8 @@ namespace Sysne.Core.ApiClient
         public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallPostFileAsync<TResponse>(string url, byte[] file, string contentName, string fileName, string mediaType, HttpContent extraContent = null, string extraName = "")
         {
             //http://stackoverflow.com/questions/16416601/c-sharp-httpclient-4-5-multipart-form-data-upload
-            var requestContent = new MultipartFormDataContent();
-            var imageContent = new ByteArrayContent(file);
+            using var requestContent = new MultipartFormDataContent();
+            using var imageContent = new ByteArrayContent(file);
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse(mediaType);
             requestContent.Add(imageContent, contentName, fileName);
             if (extraContent != null)
