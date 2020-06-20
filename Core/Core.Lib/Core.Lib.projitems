@@ -9,12 +9,13 @@
     <Import_RootNamespace>Core</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ApiClient\SecurityApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ApiClient\WebApiClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OS\ISettingsStorage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)BL\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Helpers\" />
-    <Folder Include="$(MSBuildThisFileDirectory)OS\" />
     <Folder Include="$(MSBuildThisFileDirectory)ViewModels\" />
   </ItemGroup>
 </Project>

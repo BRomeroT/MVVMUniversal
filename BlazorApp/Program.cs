@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using BlazorApp.OS;
+using System.Net.Http.Json;
+using Sysne.Core.OS;
+using Core.Lib.OS;
 
 namespace BlazorApp
 {
@@ -18,6 +22,11 @@ namespace BlazorApp
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+            using var httpClient = new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) };
+            SettingsStorage.CurrentValues = await httpClient.GetFromJsonAsync<SettingsStorage.Values>("settings.json");
+
+            DependencyService.Register<SettingsStorage, ISettingsStorage>();
 
             await builder.Build().RunAsync();
         }
