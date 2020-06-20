@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -10,7 +11,8 @@ namespace Sysne.Core.ApiClient
 {
     public class WebApiClient : HttpClient
     {
-        public WebApiClient(string urlBase = null, string urlController = null)
+        //UNDONE: Call base constructor for UWP platform and don't validate SSL certificate
+        public WebApiClient(string urlBase = null, string urlController = null) //: base(new HttpClientHandler() { ServerCertificateCustomValidationCallback = (m, cer, chain, e) => true })
         {
             var isUrlBaseNull = string.IsNullOrWhiteSpace(urlBase);
             if (isUrlBaseNull && string.IsNullOrWhiteSpace(urlController))
@@ -25,7 +27,7 @@ namespace Sysne.Core.ApiClient
                     UrlBaseWebApi = urlBase;
                     BaseAddress = new Uri(UrlBaseWebApi);
                 }
-                UrlController = UrlController;
+                UrlController = urlController;
             }
             InitHeaders();
             //Timeout = TimeSpan.FromMinutes(5);
@@ -39,7 +41,7 @@ namespace Sysne.Core.ApiClient
             set
             {
                 urlController = !value.EndsWith("/") ? value + "/" : value;
-                UrlBaseWebApi += (!UrlBaseWebApi.EndsWith("/") ? "/" : string.Empty) + value;
+                UrlBaseWebApi += (!UrlBaseWebApi.EndsWith("/") ? "/" : string.Empty) + urlController;
                 BaseAddress = new Uri(UrlBaseWebApi);
             }
         }
@@ -55,21 +57,31 @@ namespace Sysne.Core.ApiClient
 
         private async Task<(HttpStatusCode StatusCode, TResponse Content)> ProcessResponse<TResponse>(HttpRequestMessage requestMessage)
         {
-            using var res = await SendAsync(requestMessage);
-            if (res.IsSuccessStatusCode)
+            try
             {
-                var response = await res.Content.ReadFromJsonAsync<TResponse>();
-                return (res.StatusCode, response);
+                using var res = await SendAsync(requestMessage);
+                if (res.IsSuccessStatusCode)
+                {
+                    var response = await res.Content.ReadFromJsonAsync<TResponse>();
+                    return (res.StatusCode, response);
+                }
+                else
+                {
+                    return (res.StatusCode, default(TResponse));
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return (res.StatusCode, default(TResponse));
+                Debug.WriteLine(ex);
+                return default;
             }
         }
 
         public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallAsync<TResponse>(HttpMethod method, string url, HttpContent content = null)
         {
             using var requestMessage = new HttpRequestMessage(method, url);
+            if (!requestMessage.RequestUri.IsAbsoluteUri)
+                requestMessage.RequestUri = new Uri(UrlBaseWebApi + url);
             if (content != null) requestMessage.Content = content;
             return await ProcessResponse<TResponse>(requestMessage);
         }

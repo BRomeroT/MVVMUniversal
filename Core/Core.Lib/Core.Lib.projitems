@@ -11,11 +11,12 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ApiClient\SecurityApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ApiClient\WebApiClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BL\SecurityBL.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Settings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OS\ISettingsStorage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LoginViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)BL\" />
-    <Folder Include="$(MSBuildThisFileDirectory)ViewModels\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Model\" />
   </ItemGroup>
 </Project>

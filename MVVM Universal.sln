@@ -35,6 +35,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Core\Core.Lib\Core.Lib.projitems*{222f5baf-9ddd-4041-94c3-4f32c05f258b}*SharedItemsImports = 5
 		Core\Core.MVVM\Core.MVVM.projitems*{222f5baf-9ddd-4041-94c3-4f32c05f258b}*SharedItemsImports = 5
+		Core\SharedAPIModel\SharedAPIModel.projitems*{222f5baf-9ddd-4041-94c3-4f32c05f258b}*SharedItemsImports = 5
 		Core\Core.Lib\Core.Lib.projitems*{2c3f3409-2e77-481e-8523-db7fdd76f3ac}*SharedItemsImports = 13
 		Core\Core.MVVM\Core.MVVM.projitems*{4c2067f4-752a-4ed6-a586-4fdbe28b3d27}*SharedItemsImports = 13
 		Core\Core.Lib\Core.Lib.projitems*{4d4953c9-1cb7-4196-8592-735ab0b93fe1}*SharedItemsImports = 5

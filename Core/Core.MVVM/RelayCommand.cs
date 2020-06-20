@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Sysne.Core.MVVM
 {
+    [DebuggerStepThrough]
     public class RelayCommand : RelayCommand<object>
     {
         /// <summary>
@@ -14,18 +18,21 @@ namespace Sysne.Core.MVVM
         /// <param name="execute">Función sin parámetros que ejecuta el comando</param>
         /// <param name="canExecute">Función que evalúa si se han cumplido las condiciones para ejecutar el comando</param>
         /// <param name="autoDisable">Deshabilita el comando mientrase se esté ejecutando</param>
-        public RelayCommand(Action execute, Func<bool> canExecute = null, bool autoDisable = true)
-            : base(execute, canExecute, autoDisable) { }
+        /// <param name="dependencies">Propiedades que debe monitorear sus cambios para notificar que las reglas de ejecución han cambiado</param>
+        public RelayCommand(Action execute, Func<bool> canExecute = null, bool autoDisable = true, (INotifyPropertyChanged owner, string[] properties) dependencies = default)
+            : base(execute, canExecute, autoDisable, dependencies) { }
         /// <summary>
         /// Constructor de RelayCommand asíncrono
         /// </summary>
         /// <param name="execute">Función asíncrono sin parámetros que ejecuta el comando</param>
         /// <param name="canExecute">Función que evalúa si se han cumplido las condiciones para ejecutar el comando</param>
         /// <param name="autoDisable">Deshabilita el comando mientrase se esté ejecutando</param>
-        public RelayCommand(Func<Task> execute, Func<bool> canExecute = null, bool autoDisable = true)
-            : base(execute, canExecute, autoDisable) { }
+        /// <param name="dependencies">Propiedades que debe monitorear sus cambios para notificar que las reglas de ejecución han cambiado</param>
+        public RelayCommand(Func<Task> execute, Func<bool> canExecute = null, bool autoDisable = true, (INotifyPropertyChanged owner, string[] properties) dependencies = default)
+            : base(execute, canExecute, autoDisable, dependencies) { }
     }
 
+    [DebuggerStepThrough]
     public class RelayCommand<T> : ObservableObject, ICommand
     {
         #region Constructs
@@ -35,11 +42,13 @@ namespace Sysne.Core.MVVM
         /// <param name="execute">Función sin parámetros que ejecuta el comando</param>
         /// <param name="canExecute">Función que evalúa si se han cumplido las condiciones para ejecutar el comando</param>
         /// <param name="autoDisable">Deshabilita el comando mientrase se esté ejecutando</param>
-        public RelayCommand(Action execute, Func<bool> canExecute = null, bool autoDisable = true)
+        /// <param name="dependencies">Propiedades que debe monitorear sus cambios para notificar que las reglas de ejecución han cambiado</param>
+        public RelayCommand(Action execute, Func<bool> canExecute = null, bool autoDisable = true, (INotifyPropertyChanged owner, string[] properties) dependencies = default)
         {
             Action = execute;
             CanExecuteFunc = canExecute;
             AutoDisableWhenProcessing = autoDisable;
+            if (dependencies.owner != null) RaiseCanExecuteDependencies(dependencies.owner, dependencies.properties);
         }
         /// <summary>
         /// Constructor de RelayCommand asíncrono
@@ -47,11 +56,13 @@ namespace Sysne.Core.MVVM
         /// <param name="execute">Función asíncrona sin parámetros que ejecuta el comando</param>
         /// <param name="canExecute">Función que evalúa si se han cumplido las condiciones para ejecutar el comando</param>
         /// <param name="autoDisable">Deshabilita el comando mientrase se esté ejecutando</param>
-        public RelayCommand(Func<Task> execute, Func<bool> canExecute = null, bool autoDisable = true)
+        /// <param name="dependencies">Propiedades que debe monitorear sus cambios para notificar que las reglas de ejecución han cambiado</param>
+        public RelayCommand(Func<Task> execute, Func<bool> canExecute = null, bool autoDisable = true, (INotifyPropertyChanged owner, string[] properties) dependencies = default)
         {
             ActionAsync = execute;
             CanExecuteFunc = canExecute;
             AutoDisableWhenProcessing = autoDisable;
+            if (dependencies.owner != null) RaiseCanExecuteDependencies(dependencies.owner, dependencies.properties);
         }
         /// <summary>
         /// Constructor de RelayCommand con parámetros
@@ -59,11 +70,13 @@ namespace Sysne.Core.MVVM
         /// <param name="execute">Función con parámetros que ejecuta el comando</param>
         /// <param name="canExecute">Función que evalúa si se han cumplido las condiciones para ejecutar el comando</param>
         /// <param name="autoDisable">Deshabilita el comando mientrase se esté ejecutando</param>
-        public RelayCommand(Action<T> execute, Func<T, bool> canExecute = null, bool autoDisable = true)
+        /// <param name="dependencies">Propiedades que debe monitorear sus cambios para notificar que las reglas de ejecución han cambiado</param>
+        public RelayCommand(Action<T> execute, Func<T, bool> canExecute = null, bool autoDisable = true, (INotifyPropertyChanged owner, string[] properties) dependencies = default)
         {
             ActionGeneric = execute;
             CanExecuteFuncGeneric = canExecute;
             AutoDisableWhenProcessing = autoDisable;
+            if (dependencies.owner != null) RaiseCanExecuteDependencies(dependencies.owner, dependencies.properties);
         }
         /// <summary>
         /// Constructor de RelayCommand asíncrono con parámetros
@@ -71,11 +84,13 @@ namespace Sysne.Core.MVVM
         /// <param name="execute">Función asíncrona con parámetros que ejecuta el comando</param>
         /// <param name="canExecute">Función que evalúa si se han cumplido las condiciones para ejecutar el comando</param>
         /// <param name="autoDisable">Deshabilita el comando mientrase se esté ejecutando</param>
-        public RelayCommand(Func<T, Task> execute, Func<T, bool> canExecute = null, bool autoDisable = true)
+        /// <param name="dependencies">Propiedades que debe monitorear sus cambios para notificar que las reglas de ejecución han cambiado</param>
+        public RelayCommand(Func<T, Task> execute, Func<T, bool> canExecute = null, bool autoDisable = true, (INotifyPropertyChanged owner, string[] properties) dependencies = default)
         {
             ActionGenericAsync = execute;
             CanExecuteFuncGeneric = canExecute;
             AutoDisableWhenProcessing = autoDisable;
+            if (dependencies.owner != null) RaiseCanExecuteDependencies(dependencies.owner, dependencies.properties);
         }
         #endregion
 
@@ -127,6 +142,14 @@ namespace Sysne.Core.MVVM
         /// Ejecuta sin parámetros el comando
         /// </summary>
         public virtual void Execute() => Execute(null);
+
+        void RaiseCanExecuteDependencies(INotifyPropertyChanged owner, string[] properties)
+        {
+            owner.PropertyChanged += (s, e) =>
+            {
+                if (properties.Contains(e.PropertyName)) RaiseCanExecuteChanged();
+            };
+        }
         #endregion
 
         #region ICommand
@@ -170,7 +193,10 @@ namespace Sysne.Core.MVVM
         /// Ejecuta el comando
         /// </summary>
         /// <param name="parameter">Parámetro opcional del comando</param>
-        public virtual async void Execute(object parameter)
+        public virtual async void Execute(object parameter)=>
+            await ExecuteAsync(parameter);
+
+        public virtual async Task ExecuteAsync(object parameter = null)
         {
             Processing = true;
             Action?.Invoke();

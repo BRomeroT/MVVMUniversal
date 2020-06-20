@@ -1,5 +1,4 @@
-﻿using Core.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -17,7 +16,6 @@ namespace XamarinApp
         public MainPage()
         {
             InitializeComponent();
-            label.Text = Settings.Current.WebAPIUrl;
         }
     }
 }
