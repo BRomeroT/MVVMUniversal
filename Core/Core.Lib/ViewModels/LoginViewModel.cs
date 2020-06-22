@@ -1,5 +1,6 @@
 ﻿using Core.BL;
 using Sysne.Core.MVVM;
+using Sysne.Core.MVVM.Patterns;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

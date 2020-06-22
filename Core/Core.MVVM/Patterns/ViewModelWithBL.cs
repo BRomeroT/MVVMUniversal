@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Sysne.Core.MVVM
+namespace Sysne.Core.MVVM.Patterns
 {
     public class ViewModelWithBL<T> : ViewModelBase where T : new()
     {

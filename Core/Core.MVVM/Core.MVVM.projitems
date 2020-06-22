@@ -9,11 +9,19 @@
     <Import_RootNamespace>Core.MVVM</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Cloner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ErrorInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ObservableObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Patterns\ViewModelCRUD.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Patterns\ICrud.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Patterns\ISelectedItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Patterns\ViewModelSelecteItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModelBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModelWithBL.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Patterns\ViewModelWithBL.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Helpers\" />
   </ItemGroup>
 </Project>
