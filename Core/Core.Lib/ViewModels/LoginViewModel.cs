@@ -7,10 +7,10 @@ using System.Text;
 
 namespace Core.ViewModels
 {
-    public class LoginViewModel : ViewModelBase
+    public class LoginViewModel : ViewModelWithBL<SecurityBL> //: ViewModelBase
     {
-        readonly SecurityBL bl;
-        public LoginViewModel() => bl = new SecurityBL();
+        //readonly SecurityBL bl;
+        //public LoginViewModel() => bl = new SecurityBL();
 
         private string user;
         [Required(ErrorMessage = "We need your user")]
