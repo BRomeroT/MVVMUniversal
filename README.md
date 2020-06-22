@@ -1,37 +1,30 @@
-## Welcome to GitHub Pages
+# MVVMUniversal
 
-You can use the [editor on GitHub](https://github.com/BRomeroT/MVVMUniversal/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+MVVM pattern for Blazor and Xamarin *and other clients*; sharing logic code,
+businesses layers, WebAPI clients, and so on.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Architecture
 
-### Markdown
+MVVMUniversal has 4 main layers:
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+1.  Backend
+>WebAPI logic for response HTTP standard calls
 
-```markdown
-Syntax highlighted code block
+2.  Shared API Model
+>Structures for interchange data as parameters for WebAPI methods or as responses
 
-# Header 1
-## Header 2
-### Header 3
+3.  Core
+>This is the most important layer, because requires and independent platform and Views code
 
-- Bulleted
-- List
+    a.  MVVM
+>Base classes for agnostic MVVM pattern, dependency service for DI and structures error handling
 
-1. Numbered
-2. List
+    b.  Logic library
+>Logical code as WebAPI client, business layer, ViewModel and any platform agnostic code.
 
-**Bold** and _Italic_ and `Code` text
+4.  Clients
+    1.  Blazor App
+    2.  Xamarin App
+    3.  Any other compatible
 
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/BRomeroT/MVVMUniversal/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+![MVVMUniversal Architecture](img/MVVMUniversalArchitecture.png)
