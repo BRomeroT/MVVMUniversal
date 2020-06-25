@@ -105,7 +105,10 @@ namespace Sysne.Core.OS
                     case ServiceLifetime.Singleton:
                     case ServiceLifetime.Scoped:
                         if (dep.Dependency.Instance == null)
+                        {
                             dep.Dependency.Instance = GetInstance();
+                            Dependencies[typeof(I)] = dep;//Tupplas are not refrerenced objects, so we need set new value to dictionary
+                        }
                         return (I)dep.Dependency.Instance;
                     case ServiceLifetime.Transient:
                         return GetInstance();
