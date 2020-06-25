@@ -11,9 +11,11 @@ namespace Sysne.Core.ApiClient
 {
     public class WebApiClient : HttpClient
     {
-        //UNDONE: Call base constructor for UWP platform and don't validate SSL certificate
-        public WebApiClient(string urlBase = null, string urlController = null) //: base(new HttpClientHandler() { ServerCertificateCustomValidationCallback = (m, cer, chain, e) => true })
+
+        public WebApiClient(string urlBase = null, string urlController = null) : base(CertValidator.CertHandler)
         {
+            CertValidator.HandleCertValidation();
+
             var isUrlBaseNull = string.IsNullOrWhiteSpace(urlBase);
             if (isUrlBaseNull && string.IsNullOrWhiteSpace(urlController))
             {
@@ -153,6 +155,32 @@ namespace Sysne.Core.ApiClient
                 requestContent.Add(extraContent, extraName);
 
             return await CallAsync<TResponse>(HttpMethod.Post, url, requestContent);
+        }
+    }
+
+    /// <summary>
+    /// Validate SSL Certificate for HttpClient calls
+    /// </summary>
+    static class CertValidator
+    {
+        internal static HttpClientHandler CertHandler { get; } = new HttpClientHandler();
+        static bool setServerCertificateCallback;
+
+        [DebuggerStepThrough]
+        internal static void HandleCertValidation()
+        {
+            if (setServerCertificateCallback) return;
+            setServerCertificateCallback = true;
+            try
+            {
+                if (CertHandler.ServerCertificateCustomValidationCallback == null)
+                {
+                    CertHandler.ServerCertificateCustomValidationCallback = (m, cer, chain, e) => true;
+                }
+            }
+#pragma warning disable CA1031 // Only because for Blazor don't implments ServerCertificateCustomValidationCallback
+            catch { return; }
+#pragma warning restore CA1031 // Do not catch general exception types
         }
     }
 }
