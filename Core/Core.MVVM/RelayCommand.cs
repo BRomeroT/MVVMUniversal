@@ -143,7 +143,7 @@ namespace Sysne.Core.MVVM
         /// </summary>
         public virtual void Execute() => Execute(null);
 
-        void RaiseCanExecuteDependencies(INotifyPropertyChanged owner, string[] properties)
+        public void RaiseCanExecuteDependencies(INotifyPropertyChanged owner, string[] properties)
         {
             owner.PropertyChanged += (s, e) =>
             {

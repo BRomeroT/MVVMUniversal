@@ -25,29 +25,12 @@ namespace Sysne.Core.MVVM.Pattern
         public ObservableCollection<T> ListItems { get => listItems; set => Set(ref listItems, value); }
 
         private T selectedItem;
-        public T SelectedItem
-        {
-            get => selectedItem;
-            set
-            {
-                Set(ref selectedItem, value);
-                EditCommand.RaiseCanExecuteChanged();
-                DeleteCommand.RaiseCanExecuteChanged();
-            }
-        }
+        public T SelectedItem { get => selectedItem; set => Set(ref selectedItem, value); }
 
         private T editItem;
         public T EditItem { get => editItem; set => Set(ref editItem, value); }
         private Actions action = Actions.None;
-        public Actions Action
-        {
-            get => action;
-            set
-            {
-                Set(ref action, value);
-                CreateCommand.RaiseCanExecuteChanged();
-            }
-        }
+        public Actions Action { get => action; set => Set(ref action, value); }
 
         public T Clone(T original) => original.Clone();
         public void Clone(T original, ref T target) => original.CloneTo(ref target);
@@ -65,29 +48,31 @@ namespace Sysne.Core.MVVM.Pattern
         RelayCommand createCommand = null;
         public RelayCommand CreateCommand
         {
-            get => createCommand ?? (createCommand = new RelayCommand(() =>
+            get => createCommand ?? new RelayCommand(() =>
             {
                 EditItem = new T();
                 Action = Actions.Create;
-            }, () => { return Action != Actions.Create && Action != Actions.Update; }));
+            }, () => { return Action != Actions.Create && Action != Actions.Update; }
+            , dependencies: (this, new[] { nameof(Action) }));
         }
 
         RelayCommand<T> editCommand = null;
         public RelayCommand<T> EditCommand
         {
-            get => editCommand ?? (editCommand = new RelayCommand<T>((T item) =>
+            get => editCommand ?? new RelayCommand<T>((T item) =>
             {
                 SelectedItem = (item != null) ? item : SelectedItem;
                 EditItem = Clone(SelectedItem);
                 if (EditItem != null)
                     Action = Actions.Update;
-            }, (T item) => { return SelectedItem != null; }));
+            }, (T item) => { return SelectedItem != null; },
+                dependencies: (this, new[] { nameof(SelectedItem) }));
         }
 
         RelayCommand<T> deleteCommand = null;
         public RelayCommand<T> DeleteCommand
         {
-            get => deleteCommand ?? (deleteCommand = new RelayCommand<T>((T item) =>
+            get => deleteCommand ?? new RelayCommand<T>((T item) =>
             {
                 if (item == null) item = SelectedItem;
 
@@ -102,13 +87,14 @@ namespace Sysne.Core.MVVM.Pattern
 
                 ItemDeleted?.Invoke(this, notifyEventArg);
 
-            }, (T item) => { return SelectedItem != null; }));
+            }, (T item) => { return SelectedItem != null; }
+            , dependencies: (this, new[] { nameof(SelectedItem) }));
         }
 
         RelayCommand<T> saveCommand = null;
         public RelayCommand<T> SaveCommand
         {
-            get => saveCommand ?? (saveCommand = new RelayCommand<T>((T item) =>
+            get => saveCommand ?? new RelayCommand<T>((T item) =>
             {
                 if (item == null) item = EditItem;
                 EditItem = item;
@@ -118,8 +104,8 @@ namespace Sysne.Core.MVVM.Pattern
                         ListItems.Add(EditItem);
                         break;
                     case Actions.Update:
-                        if (Actualizar == null) break;
-                        var original = Actualizar.Invoke(EditItem);
+                        if (Update == null) break;
+                        var original = Update.Invoke(EditItem);
                         //var original = ListItems[ListItems.IndexOf(EditItem)]; //.FirstOrDefault(r => r.Clave == EditItem.Clave);
                         if (original != null) Clone(EditItem, ref original);
                         break;
@@ -132,24 +118,23 @@ namespace Sysne.Core.MVVM.Pattern
             }, (T item) =>
             {
                 return EditItem != null;
-            }
-            ));
+            });
         }
 
         RelayCommand cancelCommand = null;
         public RelayCommand CancelCommand
         {
-            get => cancelCommand ?? (cancelCommand = new RelayCommand(() =>
+            get => cancelCommand ?? new RelayCommand(() =>
             {
                 EditItem = default;
                 Action = Actions.None;
-            }, () => { return true; }));
+            }, () => { return true; });
         }
         #endregion
 
         #region Delegates
-        protected delegate T ActualizarDelegate(T editItem);
-        protected ActualizarDelegate Actualizar;
+        protected delegate T UpdateDelegate(T editItem);
+        protected UpdateDelegate Update;
         #endregion
 
 
