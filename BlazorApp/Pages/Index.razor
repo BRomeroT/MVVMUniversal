@@ -10,25 +10,36 @@ Welcome to your new app.
 <EditForm EditContext="@editContext" Model="@viewModel" OnValidSubmit="Submit">
     <p>
         <label>
-            User:<br/>
-            <InputText @bind-Value="viewModel.User"/>
+            User:<br />
+            <InputText @bind-Value="viewModel.User" />
         </label>
     </p>
     <p>
         <label>
-            Password:<br/>
-            <InputText @bind-Value="viewModel.Password" type="password"/>
+            Password:<br />
+            <InputText @bind-Value="viewModel.Password" type="password" />
         </label>
     </p>
     <p>
         <span style="color:red">@viewModel.ValidationSumary</span>
-        <br/>
+        <br />
         @viewModel.Messagge
     </p>
     <button type="submit" disabled="@(!viewModel.LoginCommand.CanExecuteIsEnabled)">Login</button>
 </EditForm>
 
 @code {
+
+    [Inject]
+    protected NavigationManager NavigationManager { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        (Sysne.Core.OS.DependencyService.Get<Core.Lib.OS.INavigationService>() as BlazorApp.OS.NavigationService)
+            .NavigationManager = NavigationManager;
+    }
+
     readonly LoginViewModel viewModel = new LoginViewModel();
     EditContext editContext;
     private async Task Submit()

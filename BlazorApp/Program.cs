@@ -11,6 +11,7 @@ using BlazorApp.OS;
 using System.Net.Http.Json;
 using Sysne.Core.OS;
 using Core.Lib.OS;
+using Microsoft.AspNetCore.Components;
 
 namespace BlazorApp
 {
@@ -27,7 +28,8 @@ namespace BlazorApp
             SettingsStorage.CurrentValues = await httpClient.GetFromJsonAsync<SettingsStorage.Values>("settings.json");
 
             DependencyService.Register<SettingsStorage, ISettingsStorage>();
-
+            DependencyService.Register<NavigationService, INavigationService>(DependencyService.ServiceLifetime.Singleton);
+            
             await builder.Build().RunAsync();
         }
     }
