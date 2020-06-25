@@ -2,6 +2,8 @@
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using XamarinApp.Views.OS;
+using OS = Sysne.Core.OS;
+using Core.Lib.OS;
 
 namespace XamarinApp
 {
@@ -11,9 +13,11 @@ namespace XamarinApp
         {
             InitializeComponent();
 
-            Sysne.Core.OS.DependencyService.Register<SettingsStorage, Core.Lib.OS.ISettingsStorage>();
+            OS.DependencyService.Register<NavigationService, INavigationService>(OS.DependencyService.ServiceLifetime.Singleton);
+            OS.DependencyService.Register<SettingsStorage, ISettingsStorage>();
 
-            MainPage = new MainPage();
+            MainPage = new NavigationPage(new MainPage());
+            (OS.DependencyService.Get<INavigationService>() as NavigationService).Navigation = Current.MainPage.Navigation;
         }
 
         protected override void OnStart()

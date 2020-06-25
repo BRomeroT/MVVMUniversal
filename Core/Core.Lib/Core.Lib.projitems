@@ -13,7 +13,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)ApiClient\WebApiClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BL\SecurityBL.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OS\INavigationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OS\ISettingsStorage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OS\PagesKeys.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LoginViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

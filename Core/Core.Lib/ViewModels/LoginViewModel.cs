@@ -1,6 +1,8 @@
 ﻿using Core.BL;
+using Core.Lib.OS;
 using Sysne.Core.MVVM;
 using Sysne.Core.MVVM.Patterns;
+using Sysne.Core.OS;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -31,7 +33,15 @@ namespace Core.ViewModels
             get => loginCommand ??= new RelayCommand(async () =>
             {
                 var (isValid, name) = await bl.Login(User, Password);
-                Messagge = isValid ? name : "Access denied";
+                if (isValid)
+                {
+                    Messagge = name;
+                    await DependencyService.Get<INavigationService>().NavigateTo(PagesKeys.Crud);
+                }
+                else
+                {
+                    Messagge = "Access denied";
+                }
             }, () => Validate(this, false)
             , dependencies: (this, new[] { nameof(User), nameof(Password) }));
         }

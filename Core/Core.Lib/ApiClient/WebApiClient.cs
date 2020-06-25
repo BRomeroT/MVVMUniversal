@@ -12,7 +12,7 @@ namespace Sysne.Core.ApiClient
     public class WebApiClient : HttpClient
     {
         //UNDONE: Call base constructor for UWP platform and don't validate SSL certificate
-        public WebApiClient(string urlBase = null, string urlController = null) //: base(new HttpClientHandler() { ServerCertificateCustomValidationCallback = (m, cer, chain, e) => true })
+        public WebApiClient(string urlBase = null, string urlController = null) : base(new HttpClientHandler() { ServerCertificateCustomValidationCallback = (m, cer, chain, e) => true })
         {
             var isUrlBaseNull = string.IsNullOrWhiteSpace(urlBase);
             if (isUrlBaseNull && string.IsNullOrWhiteSpace(urlController))
