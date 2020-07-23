@@ -144,6 +144,103 @@ namespace Sysne.Core.ApiClient
         public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallDeleteAsync<TResponse>(string url) =>
             await CallAsync<TResponse>(HttpMethod.Delete, url);
 
+        private async Task<HttpStatusCode> ProcessResponse(HttpRequestMessage requestMessage)
+        {
+            try
+            {
+                using var res = await SendAsync(requestMessage);
+                return res.StatusCode;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return default;
+            }
+        }
+
+        public async Task<HttpStatusCode> CallAsync(HttpMethod method, string url, HttpContent content = null)
+        {
+            using var requestMessage = new HttpRequestMessage(method, url);
+            if (!requestMessage.RequestUri.IsAbsoluteUri)
+                requestMessage.RequestUri = new Uri(UrlBaseWebApi + url);
+            if (content != null) requestMessage.Content = content;
+            return await ProcessResponse(requestMessage);
+        }
+
+        public async Task<HttpStatusCode> CallPostAsync<TRequest>(string url, TRequest req) =>
+            await CallAsync(HttpMethod.Post, url, JsonContent.Create(req));
+
+        public async Task<HttpStatusCode> CallPostAsync(string url, params (string, object)[] parameters)
+        {
+            try
+            {
+                var sb = new StringBuilder();
+                if (parameters.Length > 0)
+                {
+                    sb.Append("?");
+                    foreach (var param in parameters)
+                    {
+                        sb.Append($"{param.Item1}={param.Item2}&");
+                    }
+                    sb.Remove(sb.Length - 1, 1);
+                }
+                return await CallAsync(HttpMethod.Post, $"{url}{sb}");
+            }
+            catch (HttpRequestException ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<HttpStatusCode> CallDeleteAsync(string url) =>
+           await CallAsync(HttpMethod.Delete, url);
+        public async Task<HttpStatusCode> CallDeleteAsync(string url, params (string, object)[] parameters)
+        {
+            try
+            {
+                var sb = new StringBuilder();
+                if (parameters.Length > 0)
+                {
+                    sb.Append("?");
+                    foreach (var param in parameters)
+                    {
+                        sb.Append($"{param.Item1}={param.Item2}&");
+                    }
+                    sb.Remove(sb.Length - 1, 1);
+                }
+                return await CallAsync(HttpMethod.Delete, $"{url}{sb}");
+            }
+            catch (HttpRequestException ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallDeleteAsync<TResponse>(string url, params (string, object)[] parameters)
+        {
+            try
+            {
+                var sb = new StringBuilder();
+                if (parameters.Length > 0)
+                {
+                    sb.Append("?");
+                    foreach (var param in parameters)
+                    {
+                        sb.Append($"{param.Item1}={param.Item2}&");
+                    }
+                    sb.Remove(sb.Length - 1, 1);
+                }
+                return await CallAsync<TResponse>(HttpMethod.Delete, $"{url}{sb}");
+            }
+            catch (HttpRequestException ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<HttpStatusCode> CallPutAsync<TRequest>(string url, TRequest req) =>
+            await CallAsync(HttpMethod.Put, url, JsonContent.Create(req));
+
         public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallPostFileAsync<TResponse>(string url, byte[] file, string contentName, string fileName, string mediaType, HttpContent extraContent = null, string extraName = "")
         {
             //http://stackoverflow.com/questions/16416601/c-sharp-httpclient-4-5-multipart-form-data-upload
