@@ -38,6 +38,14 @@ namespace WebAPI.Controllers
             return NotFound();
         }
 
+        [HttpPost("UpdateSection")]
+        public IActionResult UpdateSection(SharedAPIModel.Section section)
+        {
+            var res = crudBL.UpdateSection(section);
+            if (res) return Ok(section.Id);
+            return Conflict();
+        }
+
         [HttpGet("GetItems")]
         public IActionResult GetItems(int idSection)
         {
