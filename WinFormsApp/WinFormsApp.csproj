@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <Import Project="..\Core\Core.Lib\Core.Lib.projitems" Label="Shared" />
+
+  <Import Project="..\Core\Core.MVVM\Core.MVVM.projitems" Label="Shared" />
+
+  <Import Project="..\Core\SharedAPIModel\SharedAPIModel.projitems" Label="Shared" />
+
+</Project>
