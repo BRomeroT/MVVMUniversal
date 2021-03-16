@@ -348,3 +348,4 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/WebAPI/Properties/ServiceDependencies/MVVMUniversalWebAPIs - Web Deploy/profile.arm.json

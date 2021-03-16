@@ -9,7 +9,7 @@ namespace XamarinApp.Views.OS
         public T GetValue<T>([CallerMemberName] string propertyName = null) =>
             propertyName switch
             {
-                "WebAPIUrl" => (T)(object)Preferences.Get(propertyName, "https://localhost:44328/"),
+                "WebAPIUrl" => (T)(object)Preferences.Get(propertyName, "https://mvvmuniversalwebapis.azurewebsites.net/"), //"https://localhost:44328/"),
                 //"IntSetting" => (T)(object)Preferences.Get(propertyName, 10),
                 _ => default
             };
