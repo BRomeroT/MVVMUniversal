@@ -75,7 +75,8 @@ namespace Sysne.Core.ApiClient
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                return default;
+                return
+                return (HttpStatusCode.BadRequest, default);
             }
         }
 
