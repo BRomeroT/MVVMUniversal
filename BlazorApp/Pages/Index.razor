@@ -27,24 +27,3 @@ Welcome to your new app.
     </p>
     <button type="submit" disabled="@(!viewModel.LoginCommand.CanExecuteIsEnabled)">Login</button>
 </EditForm>
-
-@code {
-
-    [Inject]
-    protected NavigationManager NavigationManager { get; set; }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        (Sysne.Core.OS.DependencyService.Get<Core.Lib.OS.INavigationService>() as BlazorApp.OS.NavigationService)
-            .NavigationManager = NavigationManager;
-    }
-
-    readonly LoginViewModel viewModel = new LoginViewModel();
-    EditContext editContext;
-    private async Task Submit()
-    {
-        await viewModel.LoginCommand.ExecuteAsync();
-        StateHasChanged();
-    }
-}
