@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Helpers;
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
@@ -11,7 +12,6 @@ namespace Sysne.Core.ApiClient
 {
     public class WebApiClient : HttpClient
     {
-
         public WebApiClient(string urlBase = null, string urlController = null) : base(CertValidator.CertHandler)
         {
             CertValidator.HandleCertValidation();
@@ -57,27 +57,67 @@ namespace Sysne.Core.ApiClient
             //}
         }
 
+        /// <summary>
+        /// Formatea los parámetros para el tipo DateTime.
+        /// </summary>
+        /// <param name="sb">StringBuilder donde se concatenan los parametros.</param>
+        /// <param name="param">Tupla de parametros.</param>
+        public void FormatingParameter(StringBuilder sb, (string, object) param)
+        {
+            if (param.Item2 != null && param.Item2.GetType() == typeof(DateTime))
+                sb.Append($"{param.Item1}={(DateTime)param.Item2:yyyy-MM-dd HH:mm:ss}&");
+            else
+                sb.Append($"{param.Item1}={param.Item2}&");
+        }
+
+        private async Task<HttpStatusCode> ProcessResponse(HttpRequestMessage requestMessage)
+        {
+            try
+            {
+                using var res = await SendAsync(requestMessage);
+                return res.StatusCode;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return default;
+            }
+        }
+
         private async Task<(HttpStatusCode StatusCode, TResponse Content)> ProcessResponse<TResponse>(HttpRequestMessage requestMessage)
         {
             try
             {
                 using var res = await SendAsync(requestMessage);
-                if (res.IsSuccessStatusCode)
-                {
-                    var response = await res.Content.ReadFromJsonAsync<TResponse>();
-                    return (res.StatusCode, response);
-                }
-                else
-                {
-                    return (res.StatusCode, default(TResponse));
-                }
+                //if (res.IsSuccessStatusCode)
+                //{
+                //    var response = await res.Content.ReadFromJsonAsync<TResponse>();
+                //    return (res.StatusCode, response);
+                //}
+                //else
+                //{
+                //    return (res.StatusCode, default(TResponse));
+                //}
+
+                var response = await res.Content.ReadFromJsonAsync<TResponse>();
+                response.ChangeInTimeZone(DateTimeZones.ToLocal);
+                return (res.StatusCode, response);
+
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                //return
-                return (HttpStatusCode.BadRequest, default);
+                return default;
             }
+        }
+
+        public async Task<HttpStatusCode> CallAsync(HttpMethod method, string url, HttpContent content = null)
+        {
+            using var requestMessage = new HttpRequestMessage(method, url);
+            if (!requestMessage.RequestUri.IsAbsoluteUri)
+                requestMessage.RequestUri = new Uri(UrlBaseWebApi + url);
+            if (content != null) requestMessage.Content = content;
+            return await ProcessResponse(requestMessage);
         }
 
         public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallAsync<TResponse>(HttpMethod method, string url, HttpContent content = null)
@@ -102,7 +142,8 @@ namespace Sysne.Core.ApiClient
                     sb.Append("?");
                     foreach (var param in parameters)
                     {
-                        sb.Append($"{param.Item1}={param.Item2}&");
+                        var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
+                        FormatingParameter(sb, (param.Item1, tmp));
                     }
                     sb.Remove(sb.Length - 1, 1);
                 }
@@ -114,8 +155,11 @@ namespace Sysne.Core.ApiClient
             }
         }
 
-        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallPostAsync<TRequest, TResponse>(string url, TRequest req) =>
-            await CallAsync<TResponse>(HttpMethod.Post, url, JsonContent.Create(req));
+        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallPostAsync<TRequest, TResponse>(string url, TRequest req)
+        {
+            req.ChangeOutDateTime(DateTimeZones.ToUTC);
+            return await CallAsync<TResponse>(HttpMethod.Post, url, JsonContent.Create(req));
+        }
 
         public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallPostAsync<TResponse>(string url, params (string, object)[] parameters)
         {
@@ -127,7 +171,8 @@ namespace Sysne.Core.ApiClient
                     sb.Append("?");
                     foreach (var param in parameters)
                     {
-                        sb.Append($"{param.Item1}={param.Item2}&");
+                        var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
+                        FormatingParameter(sb, (param.Item1, tmp));
                     }
                     sb.Remove(sb.Length - 1, 1);
                 }
@@ -139,37 +184,11 @@ namespace Sysne.Core.ApiClient
             }
         }
 
-        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallPutAsync<TRequest, TResponse>(string url, TRequest req) =>
-            await CallAsync<TResponse>(HttpMethod.Put, url, JsonContent.Create(req));
-
-        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallDeleteAsync<TResponse>(string url) =>
-            await CallAsync<TResponse>(HttpMethod.Delete, url);
-
-        private async Task<HttpStatusCode> ProcessResponse(HttpRequestMessage requestMessage)
+        public async Task<HttpStatusCode> CallPostAsync<TRequest>(string url, TRequest req)
         {
-            try
-            {
-                using var res = await SendAsync(requestMessage);
-                return res.StatusCode;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                return default;
-            }
+            req.ChangeOutDateTime(DateTimeZones.ToUTC);
+            return await CallAsync(HttpMethod.Post, url, JsonContent.Create(req));
         }
-
-        public async Task<HttpStatusCode> CallAsync(HttpMethod method, string url, HttpContent content = null)
-        {
-            using var requestMessage = new HttpRequestMessage(method, url);
-            if (!requestMessage.RequestUri.IsAbsoluteUri)
-                requestMessage.RequestUri = new Uri(UrlBaseWebApi + url);
-            if (content != null) requestMessage.Content = content;
-            return await ProcessResponse(requestMessage);
-        }
-
-        public async Task<HttpStatusCode> CallPostAsync<TRequest>(string url, TRequest req) =>
-            await CallAsync(HttpMethod.Post, url, JsonContent.Create(req));
 
         public async Task<HttpStatusCode> CallPostAsync(string url, params (string, object)[] parameters)
         {
@@ -181,11 +200,49 @@ namespace Sysne.Core.ApiClient
                     sb.Append("?");
                     foreach (var param in parameters)
                     {
-                        sb.Append($"{param.Item1}={param.Item2}&");
+                        var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
+                        FormatingParameter(sb, (param.Item1, tmp));
                     }
                     sb.Remove(sb.Length - 1, 1);
                 }
                 return await CallAsync(HttpMethod.Post, $"{url}{sb}");
+            }
+            catch (HttpRequestException ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallPutAsync<TRequest, TResponse>(string url, TRequest req)
+        {
+            req.ChangeOutDateTime(DateTimeZones.ToUTC);
+            return await CallAsync<TResponse>(HttpMethod.Put, url, JsonContent.Create(req));
+        }
+
+        public async Task<HttpStatusCode> CallPutAsync<TRequest>(string url, TRequest req)
+        {
+            req.ChangeOutDateTime(DateTimeZones.ToUTC);
+            return await CallAsync(HttpMethod.Put, url, JsonContent.Create(req));
+        }
+
+        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallDeleteAsync<TResponse>(string url) =>
+            await CallAsync<TResponse>(HttpMethod.Delete, url);
+        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallDeleteAsync<TResponse>(string url, params (string, object)[] parameters)
+        {
+            try
+            {
+                var sb = new StringBuilder();
+                if (parameters.Length > 0)
+                {
+                    sb.Append("?");
+                    foreach (var param in parameters)
+                    {
+                        var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
+                        FormatingParameter(sb, (param.Item1, tmp));
+                    }
+                    sb.Remove(sb.Length - 1, 1);
+                }
+                return await CallAsync<TResponse>(HttpMethod.Delete, $"{url}{sb}");
             }
             catch (HttpRequestException ex)
             {
@@ -205,7 +262,8 @@ namespace Sysne.Core.ApiClient
                     sb.Append("?");
                     foreach (var param in parameters)
                     {
-                        sb.Append($"{param.Item1}={param.Item2}&");
+                        var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
+                        FormatingParameter(sb, (param.Item1, tmp));
                     }
                     sb.Remove(sb.Length - 1, 1);
                 }
@@ -216,31 +274,6 @@ namespace Sysne.Core.ApiClient
                 throw ex;
             }
         }
-
-        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallDeleteAsync<TResponse>(string url, params (string, object)[] parameters)
-        {
-            try
-            {
-                var sb = new StringBuilder();
-                if (parameters.Length > 0)
-                {
-                    sb.Append("?");
-                    foreach (var param in parameters)
-                    {
-                        sb.Append($"{param.Item1}={param.Item2}&");
-                    }
-                    sb.Remove(sb.Length - 1, 1);
-                }
-                return await CallAsync<TResponse>(HttpMethod.Delete, $"{url}{sb}");
-            }
-            catch (HttpRequestException ex)
-            {
-                throw ex;
-            }
-        }
-
-        public async Task<HttpStatusCode> CallPutAsync<TRequest>(string url, TRequest req) =>
-            await CallAsync(HttpMethod.Put, url, JsonContent.Create(req));
 
         public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallPostFileAsync<TResponse>(string url, byte[] file, string contentName, string fileName, string mediaType, HttpContent extraContent = null, string extraName = "")
         {
