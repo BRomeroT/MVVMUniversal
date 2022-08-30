@@ -4,6 +4,10 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>Core.Lib.MVVMUniversal</PackageId>
+    <Title>Core.Lib.MVVMUniversal</Title>
+    <Authors>Benjamin Romero Tanus</Authors>
+    <Company>Sysne Automatizacion de Mexico S.A. de C.V.</Company>
   </PropertyGroup>
 
   <ItemGroup>
