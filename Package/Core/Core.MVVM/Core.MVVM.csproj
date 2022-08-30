@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>MVVM Universal</Title>
+    <Authors>Benjamin Romero Tanus</Authors>
+    <Company>Sysne Automatizacion de Mexico S.A. de C.V.</Company>
+    <Description>Proyecto MVVM Universal para implementar el patron MVVM en diferentes clientes 
+Xamarin-MAUI / Blazor / Winforms </Description>
+    <PackageTags>mvvm;universal; mvvm universal; mvvm maui</PackageTags>
+    <PackageReleaseNotes>version de empaquetado actualizada a Net 6 con soporte MAUI</PackageReleaseNotes>
+  </PropertyGroup>
+
+</Project>
