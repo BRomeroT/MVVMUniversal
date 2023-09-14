@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30204.135
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinApp.UWP", "XamarinApp\XamarinApp.UWP\XamarinApp.UWP.csproj", "{50192D32-9EB1-418D-842E-72F5EB1CE7F1}"
 EndProject
@@ -33,24 +33,13 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Core.Lib", "Core\Core.Lib\C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinForms", "WinForms", "{190B4B7D-C017-40CE-9F74-9792C75E6B7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsApp", "WinFormsApp\WinFormsApp.csproj", "{FFDAC009-7660-4C2D-AAB8-82D667D5BB5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormsApp", "WinFormsApp\WinFormsApp.csproj", "{FFDAC009-7660-4C2D-AAB8-82D667D5BB5A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MauiCore", "MauiCore", "{E3CAEA5E-54BB-4BED-8A7C-895BB7A0AFF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DonatPrueba", "DonatPrueba\DonatPrueba.csproj", "{18445E8F-CBF2-481F-BC62-05DFCFB08359}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Core\Core.Lib\Core.Lib.projitems*{222f5baf-9ddd-4041-94c3-4f32c05f258b}*SharedItemsImports = 5
-		Core\Core.MVVM\Core.MVVM.projitems*{222f5baf-9ddd-4041-94c3-4f32c05f258b}*SharedItemsImports = 5
-		Core\SharedAPIModel\SharedAPIModel.projitems*{222f5baf-9ddd-4041-94c3-4f32c05f258b}*SharedItemsImports = 5
-		Core\Core.Lib\Core.Lib.projitems*{2c3f3409-2e77-481e-8523-db7fdd76f3ac}*SharedItemsImports = 13
-		Core\Core.MVVM\Core.MVVM.projitems*{4c2067f4-752a-4ed6-a586-4fdbe28b3d27}*SharedItemsImports = 13
-		Core\Core.Lib\Core.Lib.projitems*{4d4953c9-1cb7-4196-8592-735ab0b93fe1}*SharedItemsImports = 5
-		Core\Core.MVVM\Core.MVVM.projitems*{4d4953c9-1cb7-4196-8592-735ab0b93fe1}*SharedItemsImports = 5
-		Core\SharedAPIModel\SharedAPIModel.projitems*{4d4953c9-1cb7-4196-8592-735ab0b93fe1}*SharedItemsImports = 5
-		Core\SharedAPIModel\SharedAPIModel.projitems*{706d38af-59ec-4383-8e09-8529cbf337d8}*SharedItemsImports = 13
-		Core\SharedAPIModel\SharedAPIModel.projitems*{faa72f26-05ba-4c6f-9a2e-23caf6541fd0}*SharedItemsImports = 5
-		Core\Core.Lib\Core.Lib.projitems*{ffdac009-7660-4c2d-aab8-82d667d5bb5a}*SharedItemsImports = 5
-		Core\Core.MVVM\Core.MVVM.projitems*{ffdac009-7660-4c2d-aab8-82d667d5bb5a}*SharedItemsImports = 5
-		Core\SharedAPIModel\SharedAPIModel.projitems*{ffdac009-7660-4c2d-aab8-82d667d5bb5a}*SharedItemsImports = 5
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM
@@ -239,6 +228,42 @@ Global
 		{FFDAC009-7660-4C2D-AAB8-82D667D5BB5A}.Release|x64.Build.0 = Release|Any CPU
 		{FFDAC009-7660-4C2D-AAB8-82D667D5BB5A}.Release|x86.ActiveCfg = Release|Any CPU
 		{FFDAC009-7660-4C2D-AAB8-82D667D5BB5A}.Release|x86.Build.0 = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|ARM.Build.0 = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|ARM.Deploy.0 = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|iPhone.Deploy.0 = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|iPhoneSimulator.Deploy.0 = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|x64.Build.0 = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|x64.Deploy.0 = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|x86.Build.0 = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Debug|x86.Deploy.0 = Debug|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|ARM.ActiveCfg = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|ARM.Build.0 = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|ARM.Deploy.0 = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|iPhone.Build.0 = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|iPhone.Deploy.0 = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|iPhoneSimulator.Deploy.0 = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|x64.ActiveCfg = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|x64.Build.0 = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|x64.Deploy.0 = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|x86.ActiveCfg = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|x86.Build.0 = Release|Any CPU
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359}.Release|x86.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -255,8 +280,24 @@ Global
 		{4C2067F4-752A-4ED6-A586-4FDBE28B3D27} = {34D020E1-BDA1-4BBA-B375-A21DA6135BC0}
 		{2C3F3409-2E77-481E-8523-DB7FDD76F3AC} = {34D020E1-BDA1-4BBA-B375-A21DA6135BC0}
 		{FFDAC009-7660-4C2D-AAB8-82D667D5BB5A} = {190B4B7D-C017-40CE-9F74-9792C75E6B7C}
+		{18445E8F-CBF2-481F-BC62-05DFCFB08359} = {E3CAEA5E-54BB-4BED-8A7C-895BB7A0AFF1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B64C4837-0C3C-4785-8D1B-B0FE5873F89D}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Core\Core.Lib\Core.Lib.projitems*{222f5baf-9ddd-4041-94c3-4f32c05f258b}*SharedItemsImports = 5
+		Core\Core.MVVM\Core.MVVM.projitems*{222f5baf-9ddd-4041-94c3-4f32c05f258b}*SharedItemsImports = 5
+		Core\SharedAPIModel\SharedAPIModel.projitems*{222f5baf-9ddd-4041-94c3-4f32c05f258b}*SharedItemsImports = 5
+		Core\Core.Lib\Core.Lib.projitems*{2c3f3409-2e77-481e-8523-db7fdd76f3ac}*SharedItemsImports = 13
+		Core\Core.MVVM\Core.MVVM.projitems*{4c2067f4-752a-4ed6-a586-4fdbe28b3d27}*SharedItemsImports = 13
+		Core\Core.Lib\Core.Lib.projitems*{4d4953c9-1cb7-4196-8592-735ab0b93fe1}*SharedItemsImports = 5
+		Core\Core.MVVM\Core.MVVM.projitems*{4d4953c9-1cb7-4196-8592-735ab0b93fe1}*SharedItemsImports = 5
+		Core\SharedAPIModel\SharedAPIModel.projitems*{4d4953c9-1cb7-4196-8592-735ab0b93fe1}*SharedItemsImports = 5
+		Core\SharedAPIModel\SharedAPIModel.projitems*{706d38af-59ec-4383-8e09-8529cbf337d8}*SharedItemsImports = 13
+		Core\SharedAPIModel\SharedAPIModel.projitems*{faa72f26-05ba-4c6f-9a2e-23caf6541fd0}*SharedItemsImports = 5
+		Core\Core.Lib\Core.Lib.projitems*{ffdac009-7660-4c2d-aab8-82d667d5bb5a}*SharedItemsImports = 5
+		Core\Core.MVVM\Core.MVVM.projitems*{ffdac009-7660-4c2d-aab8-82d667d5bb5a}*SharedItemsImports = 5
+		Core\SharedAPIModel\SharedAPIModel.projitems*{ffdac009-7660-4c2d-aab8-82d667d5bb5a}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal
