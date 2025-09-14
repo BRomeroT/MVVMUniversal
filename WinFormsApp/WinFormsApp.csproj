@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <Import Project="..\Core\Core.Lib\Core.Lib.projitems" Label="Shared" />

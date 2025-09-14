@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <Import Project="..\Core\SharedAPIModel\SharedAPIModel.projitems" Label="Shared" />
-
 
 </Project>

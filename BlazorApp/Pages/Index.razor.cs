@@ -21,7 +21,7 @@ namespace BlazorApp.Pages
         }
 
         readonly LoginViewModel viewModel = new LoginViewModel();
-        EditContext editContext;
+        EditContext editContext = new EditContext(new object());
         private async Task Submit()
         {
             await viewModel.LoginCommand.ExecuteAsync();

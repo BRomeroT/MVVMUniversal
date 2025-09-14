@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <WarningsNotAsErrors />
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.csproj' AND '$(UsingMicrosoftNETSdkBlazorWebAssembly)' == 'true'">
+    <DefineConstants>$(DefineConstants);BROWSER</DefineConstants>
+  </PropertyGroup>
+</Project>

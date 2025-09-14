@@ -134,25 +134,18 @@ namespace Sysne.Core.ApiClient
 
         public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallGetAsync<TResponse>(string url, params (string, object)[] parameters)
         {
-            try
+            var sb = new StringBuilder();
+            if (parameters.Length > 0)
             {
-                var sb = new StringBuilder();
-                if (parameters.Length > 0)
+                sb.Append("?");
+                foreach (var param in parameters)
                 {
-                    sb.Append("?");
-                    foreach (var param in parameters)
-                    {
-                        var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
-                        FormatingParameter(sb, (param.Item1, tmp));
-                    }
-                    sb.Remove(sb.Length - 1, 1);
+                    var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
+                    FormatingParameter(sb, (param.Item1, tmp));
                 }
-                return await CallAsync<TResponse>(HttpMethod.Get, $"{url}{sb}");
+                sb.Remove(sb.Length - 1, 1);
             }
-            catch (HttpRequestException ex)
-            {
-                throw ex;
-            }
+            return await CallAsync<TResponse>(HttpMethod.Get, $"{url}{sb}");
         }
 
         public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallPostAsync<TRequest, TResponse>(string url, TRequest req)
@@ -163,25 +156,18 @@ namespace Sysne.Core.ApiClient
 
         public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallPostAsync<TResponse>(string url, params (string, object)[] parameters)
         {
-            try
+            var sb = new StringBuilder();
+            if (parameters.Length > 0)
             {
-                var sb = new StringBuilder();
-                if (parameters.Length > 0)
+                sb.Append("?");
+                foreach (var param in parameters)
                 {
-                    sb.Append("?");
-                    foreach (var param in parameters)
-                    {
-                        var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
-                        FormatingParameter(sb, (param.Item1, tmp));
-                    }
-                    sb.Remove(sb.Length - 1, 1);
+                    var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
+                    FormatingParameter(sb, (param.Item1, tmp));
                 }
-                return await CallAsync<TResponse>(HttpMethod.Post, $"{url}{sb}");
+                sb.Remove(sb.Length - 1, 1);
             }
-            catch (HttpRequestException ex)
-            {
-                throw ex;
-            }
+            return await CallAsync<TResponse>(HttpMethod.Post, $"{url}{sb}");
         }
 
         public async Task<HttpStatusCode> CallPostAsync<TRequest>(string url, TRequest req)
@@ -192,25 +178,18 @@ namespace Sysne.Core.ApiClient
 
         public async Task<HttpStatusCode> CallPostAsync(string url, params (string, object)[] parameters)
         {
-            try
+            var sb = new StringBuilder();
+            if (parameters.Length > 0)
             {
-                var sb = new StringBuilder();
-                if (parameters.Length > 0)
+                sb.Append("?");
+                foreach (var param in parameters)
                 {
-                    sb.Append("?");
-                    foreach (var param in parameters)
-                    {
-                        var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
-                        FormatingParameter(sb, (param.Item1, tmp));
-                    }
-                    sb.Remove(sb.Length - 1, 1);
+                    var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
+                    FormatingParameter(sb, (param.Item1, tmp));
                 }
-                return await CallAsync(HttpMethod.Post, $"{url}{sb}");
+                sb.Remove(sb.Length - 1, 1);
             }
-            catch (HttpRequestException ex)
-            {
-                throw ex;
-            }
+            return await CallAsync(HttpMethod.Post, $"{url}{sb}");
         }
 
         public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallPutAsync<TRequest, TResponse>(string url, TRequest req)
@@ -229,50 +208,36 @@ namespace Sysne.Core.ApiClient
             await CallAsync<TResponse>(HttpMethod.Delete, url);
         public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallDeleteAsync<TResponse>(string url, params (string, object)[] parameters)
         {
-            try
+            var sb = new StringBuilder();
+            if (parameters.Length > 0)
             {
-                var sb = new StringBuilder();
-                if (parameters.Length > 0)
+                sb.Append("?");
+                foreach (var param in parameters)
                 {
-                    sb.Append("?");
-                    foreach (var param in parameters)
-                    {
-                        var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
-                        FormatingParameter(sb, (param.Item1, tmp));
-                    }
-                    sb.Remove(sb.Length - 1, 1);
+                    var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
+                    FormatingParameter(sb, (param.Item1, tmp));
                 }
-                return await CallAsync<TResponse>(HttpMethod.Delete, $"{url}{sb}");
+                sb.Remove(sb.Length - 1, 1);
             }
-            catch (HttpRequestException ex)
-            {
-                throw ex;
-            }
+            return await CallAsync<TResponse>(HttpMethod.Delete, $"{url}{sb}");
         }
 
         public async Task<HttpStatusCode> CallDeleteAsync(string url) =>
            await CallAsync(HttpMethod.Delete, url);
         public async Task<HttpStatusCode> CallDeleteAsync(string url, params (string, object)[] parameters)
         {
-            try
+            var sb = new StringBuilder();
+            if (parameters.Length > 0)
             {
-                var sb = new StringBuilder();
-                if (parameters.Length > 0)
+                sb.Append("?");
+                foreach (var param in parameters)
                 {
-                    sb.Append("?");
-                    foreach (var param in parameters)
-                    {
-                        var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
-                        FormatingParameter(sb, (param.Item1, tmp));
-                    }
-                    sb.Remove(sb.Length - 1, 1);
+                    var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
+                    FormatingParameter(sb, (param.Item1, tmp));
                 }
-                return await CallAsync(HttpMethod.Delete, $"{url}{sb}");
+                sb.Remove(sb.Length - 1, 1);
             }
-            catch (HttpRequestException ex)
-            {
-                throw ex;
-            }
+            return await CallAsync(HttpMethod.Delete, $"{url}{sb}");
         }
 
         public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallPostFileAsync<TResponse>(string url, byte[] file, string contentName, string fileName, string mediaType, HttpContent extraContent = null, string extraName = "")
@@ -304,10 +269,12 @@ namespace Sysne.Core.ApiClient
             setServerCertificateCallback = true;
             try
             {
+#if !BROWSER
                 if (CertHandler.ServerCertificateCustomValidationCallback == null)
                 {
                     CertHandler.ServerCertificateCustomValidationCallback = (m, cer, chain, e) => true;
                 }
+#endif
             }
 #pragma warning disable CA1031 // Only because for Blazor don't implments ServerCertificateCustomValidationCallback
             catch { return; }
