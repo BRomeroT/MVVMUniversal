@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Sysne.Core.MVVM.Helpers;
+using Codeland.Core.MVVM.Helpers;
 
-namespace Sysne.Core.MVVM.Pattern
+namespace Codeland.Core.MVVM.Pattern
 {
     public class NotificationEventArg<T> : EventArgs
     {

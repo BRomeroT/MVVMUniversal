@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sysne.Core.MVVM.Pattern
+namespace Codeland.Core.MVVM.Pattern
 {
     public class ViewModelSelecteItem<T> : ObservableObject, ISelectedItem<T>
     {

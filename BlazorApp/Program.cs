@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using BlazorApp.OS;
 using System.Net.Http.Json;
-using Sysne.Core.OS;
+using Codeland.Core.OS;
 using Core.Lib.OS;
 using Microsoft.AspNetCore.Components;
 

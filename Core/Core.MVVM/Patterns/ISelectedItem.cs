@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Sysne.Core.MVVM.Pattern
+namespace Codeland.Core.MVVM.Pattern
 {
     interface ISelectedItem<T>
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Sysne.Core.OS
+namespace Codeland.Core.OS
 {
     /// <summary>
     /// Allow register dependencies and their lifetime
@@ -77,67 +77,46 @@ namespace Sysne.Core.OS
         /// <summary>
         /// Registers a singleton dependency
         /// </summary>
-        /// <typeparam name="C"></typeparam>
-        /// <param name="instance"></param>
-        public static void Register<C>(C? instance = default, Func<object>? implementationFactory = null) where C : class, new()
-        {
-            Register<C, C>(ServiceLifetime.Singleton, implementationFactory, instance);
-        }
+        /// <typeparam name="C">Class that implements dependency</typeparam>
+        /// <typeparam name="I">Interface shared</typeparam>
+        /// <param name="instance">Specific instance</param>
+        public static void RegisterSingleton<C, I>(C? instance = default) where C : class, I, new() => Register<C, I>(ServiceLifetime.Singleton, null, instance);
 
         /// <summary>
-        /// Get instance of dependency
+        /// Gets an instance of registered dependency 
         /// </summary>
-        /// <typeparam name="I">Type of dependency</typeparam>
-        /// <returns>Instance of Type dependency</returns>
+        /// <typeparam name="I">Interface shared</typeparam>
+        /// <returns>Instance</returns>
         public static I Get<I>()
         {
             if (Dependencies.TryGetValue(typeof(I), out var dep))
             {
-                I GetInstance()
+                return dep.Lifetime switch
                 {
-                    if (dep.Dependency.ImplementationFactory != null)
-                        return (I)dep.Dependency.ImplementationFactory();
-                    else
-                        return (I)Activator.CreateInstance(dep.Type)!;
-                }
-                switch (dep.Lifetime)
-                {
-                    case ServiceLifetime.Singleton:
-                    case ServiceLifetime.Scoped:
-                        if (dep.Dependency.Instance == null)
-                        {
-                            dep.Dependency.Instance = GetInstance();
-                            Dependencies[typeof(I)] = dep;//Tupplas are not refrerenced objects, so we need set new value to dictionary
-                        }
-                        return (I)dep.Dependency.Instance;
-                    case ServiceLifetime.Transient:
-                        return GetInstance();
-                    default: return default!;
-                }
+                    ServiceLifetime.Singleton => GetSingleton<I>(dep),
+                    ServiceLifetime.Scoped => GetScoped<I>(dep),
+                    ServiceLifetime.Transient => GetTransient<I>(dep),
+                    _ => throw new NotImplementedException(),
+                };
             }
             else
-                throw new KeyNotFoundException($"Unregistered {typeof(I).Name} type");
+                throw new InvalidOperationException($"Service {typeof(I).Name} is not registered");
         }
 
-        /// <summary>
-        /// Release resources of dependency
-        /// </summary>
-        /// <typeparam name="I">Dependency type</typeparam>
-        public static void Release<I>()
+        private static I GetSingleton<I>((ServiceLifetime Lifetime, Type Type, (Func<object>? ImplementationFactory, object? Instance) Dependency) dep)
         {
-            if (Dependencies.TryGetValue(typeof(I), out var dep))
+            if (dep.Dependency.Instance is null)
             {
-                if (dep.Dependency.Instance != null)
-                {
-                    (dep.Dependency.Instance as IDisposable)?.Dispose();
-                    dep.Dependency.Instance = null;
-                }
-                dep.Dependency.ImplementationFactory = null;
-                Dependencies.Remove(typeof(I));
-            }
-            else
-                throw new KeyNotFoundException($"Unregistered {typeof(I)} type");
-        }
-    }
+                dep.Dependency.Instance = dep.Dependency.ImplementationFactory?.Invoke() ?? Activator.CreateInstance(dep.Type);
 
+                Dependencies[typeof(I)] = dep;
+            }
+
+            return (I)dep.Dependency.Instance;
+        }
+
+        private static I GetScoped<I>((ServiceLifetime Lifetime, Type Type, (Func<object>? ImplementationFactory, object? Instance) Dependency) dep) => GetSingleton<I>(dep);
+
+        private static I GetTransient<I>((ServiceLifetime Lifetime, Type Type, (Func<object>? ImplementationFactory, object? Instance) Dependency) dep) => (I)(dep.Dependency.ImplementationFactory?.Invoke() ?? Activator.CreateInstance(dep.Type));
+    }
 }

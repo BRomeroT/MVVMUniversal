@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace Sysne.Core.MVVM
+namespace Codeland.Core.MVVM
 {
     /// <summary>
     /// Object with property changes notifications

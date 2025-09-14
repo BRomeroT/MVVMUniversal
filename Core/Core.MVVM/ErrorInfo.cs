@@ -1,4 +1,4 @@
-﻿namespace Sysne.Core.MVVM
+﻿namespace Codeland.Core.MVVM
 {
     public class ErrorInfo : ObservableObject
     {

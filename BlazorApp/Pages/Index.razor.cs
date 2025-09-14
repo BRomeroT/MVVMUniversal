@@ -16,7 +16,7 @@ namespace BlazorApp.Pages
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            (Sysne.Core.OS.DependencyService.Get<Core.Lib.OS.INavigationService>() as BlazorApp.OS.NavigationService)
+            (Codeland.Core.OS.DependencyService.Get<Core.Lib.OS.INavigationService>() as BlazorApp.OS.NavigationService)
                 .NavigationManager = NavigationManager;
         }
 

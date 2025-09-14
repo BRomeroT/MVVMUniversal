@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Sysne.Core.MVVM
+namespace Codeland.Core.MVVM
 {
     [DebuggerStepThrough]
     public class RelayCommand : RelayCommand<object>

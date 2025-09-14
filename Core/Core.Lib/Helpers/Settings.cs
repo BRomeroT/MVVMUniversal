@@ -1,6 +1,6 @@
 ﻿using Core.Lib.OS;
-using Sysne.Core.MVVM;
-using Sysne.Core.OS;
+using Codeland.Core.MVVM;
+using Codeland.Core.OS;
 using System;
 using System.Runtime.CompilerServices;
 

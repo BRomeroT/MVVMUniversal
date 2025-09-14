@@ -8,7 +8,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sysne.Core.ApiClient
+namespace Codeland.Core.ApiClient
 {
     public class WebApiClient : HttpClient
     {

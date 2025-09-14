@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sysne.Core.MVVM.Helpers
+namespace Codeland.Core.MVVM.Helpers
 {
     public static class Cloner
     {

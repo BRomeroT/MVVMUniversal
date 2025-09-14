@@ -1,8 +1,8 @@
 ﻿using Core.BL;
 using Core.Lib.OS;
-using Sysne.Core.MVVM;
-using Sysne.Core.MVVM.Patterns;
-using Sysne.Core.OS;
+using Codeland.Core.MVVM;
+using Codeland.Core.MVVM.Patterns;
+using Codeland.Core.OS;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

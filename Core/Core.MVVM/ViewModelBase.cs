@@ -1,4 +1,4 @@
-﻿namespace Sysne.Core.MVVM
+﻿namespace Codeland.Core.MVVM
 {
     /// <summary>
     /// Common ViewModel functionality

@@ -2,7 +2,7 @@
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using XamarinApp.Views.OS;
-using OS = Sysne.Core.OS;
+using OS = Codeland.Core.OS;
 using Core.Lib.OS;
 
 namespace XamarinApp

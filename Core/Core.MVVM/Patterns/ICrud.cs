@@ -1,4 +1,4 @@
-﻿namespace Sysne.Core.MVVM.Pattern
+﻿namespace Codeland.Core.MVVM.Pattern
 {
     public enum Actions
     {
