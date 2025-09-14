@@ -7,9 +7,9 @@ namespace WebAPI.Model
 {
     public class Credential
     {
-        public string User { get; set; }
-        public string Password { get; set; }
-        public string Name { get; set; }
+        public required string User { get; set; }
+        public required string Password { get; set; }
+        public required string Name { get; set; }
         public bool Active { get; set; } = true;
     }
 }

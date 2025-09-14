@@ -16,9 +16,13 @@ namespace WebAPI.Model
                 switch (e.Action)
                 {
                     case NotifyCollectionChangedAction.Add:
-                        foreach (var item in e.NewItems)
+                        if (e.NewItems != null)
                         {
-                            ((Item)item).Section = this;
+                            foreach (var item in e.NewItems)
+                            {
+                                if (item is Item itemObj)
+                                    itemObj.Section = this;
+                            }
                         }
                         break;
                     case NotifyCollectionChangedAction.Remove:
@@ -29,7 +33,7 @@ namespace WebAPI.Model
             };
         }
         public int Id { get; set; }
-        public string Name { get; set; }
+        public required string Name { get; set; }
         public ObservableCollection<Item> Items { get; set; } = new ObservableCollection<Item>();
     }
 }

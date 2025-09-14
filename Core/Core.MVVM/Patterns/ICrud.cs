@@ -8,7 +8,7 @@
     interface ICrud<T> : ISelectedItem<T>
     {
 
-        T EditItem { get; set; }
+        T? EditItem { get; set; }
 
         Actions Action { get; set; }
 

@@ -13,7 +13,7 @@ namespace Core.Lib.ApiClient
     {
         public SecurityApi() : base(Settings.Current.WebAPIUrl, "Security") { }
 
-        public async Task<(HttpStatusCode StatusCode, string Name)> Login(Credential credential) =>
+        public async Task<(HttpStatusCode StatusCode, string? Name)> Login(Credential credential) =>
             await CallPostAsync<Credential, string>("Login", credential);
     }
 }

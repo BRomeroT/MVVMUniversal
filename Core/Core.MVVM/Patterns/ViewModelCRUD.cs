@@ -10,25 +10,25 @@ namespace Sysne.Core.MVVM.Pattern
 {
     public class NotificationEventArg<T> : EventArgs
     {
-        public T Item { get; set; }
+        public T? Item { get; set; }
         public bool Cancel { get; set; } = false;
     }
 
-    public abstract class ViewModelCRUD<T> : ObservableObject, ICrud<T> where T : new()
+    public abstract class ViewModelCRUD<T> : ObservableObject, ICrud<T> where T : class, new()
     {
         #region Events
-        public event EventHandler<NotificationEventArg<T>> DeletingItem;
-        public event EventHandler<NotificationEventArg<T>> ItemDeleted;
+        public event EventHandler<NotificationEventArg<T>>? DeletingItem;
+        public event EventHandler<NotificationEventArg<T>>? ItemDeleted;
         #endregion
 
         private ObservableCollection<T> listItems = new ObservableCollection<T>();
         public ObservableCollection<T> ListItems { get => listItems; set => Set(ref listItems, value); }
 
-        private T selectedItem;
-        public T SelectedItem { get => selectedItem; set => Set(ref selectedItem, value); }
+        private T? selectedItem;
+        public T? SelectedItem { get => selectedItem; set => Set(ref selectedItem, value); }
 
-        private T editItem;
-        public T EditItem { get => editItem; set => Set(ref editItem, value); }
+        private T? editItem;
+        public T? EditItem { get => editItem; set => Set(ref editItem, value); }
         private Actions action = Actions.None;
         public Actions Action { get => action; set => Set(ref action, value); }
 
@@ -36,7 +36,7 @@ namespace Sysne.Core.MVVM.Pattern
         public void Clone(T original, ref T target) => original.CloneTo(ref target);
 
         #region Commands
-        protected RelayCommand readCommand = null;
+        protected RelayCommand? readCommand = null;
         public virtual RelayCommand ReadCommand
         {
             get => readCommand ?? (readCommand = new RelayCommand(() =>
@@ -45,36 +45,40 @@ namespace Sysne.Core.MVVM.Pattern
             }, () => { return true; }));
         }
 
-        RelayCommand createCommand = null;
+        RelayCommand? createCommand = null;
         public RelayCommand CreateCommand
         {
-            get => createCommand ?? new RelayCommand(() =>
+            get => createCommand ?? (createCommand = new RelayCommand(() =>
             {
                 EditItem = new T();
                 Action = Actions.Create;
             }, () => { return Action != Actions.Create && Action != Actions.Update; }
-            , dependencies: (this, new[] { nameof(Action) }));
+            , dependencies: (this, new[] { nameof(Action) })));
         }
 
-        RelayCommand<T> editCommand = null;
+        RelayCommand<T>? editCommand = null;
         public RelayCommand<T> EditCommand
         {
-            get => editCommand ?? new RelayCommand<T>((T item) =>
+            get => editCommand ?? (editCommand = new RelayCommand<T>((T? item) =>
             {
                 SelectedItem = (item != null) ? item : SelectedItem;
-                EditItem = Clone(SelectedItem);
-                if (EditItem != null)
-                    Action = Actions.Update;
-            }, (T item) => { return SelectedItem != null; },
-                dependencies: (this, new[] { nameof(SelectedItem) }));
+                if (SelectedItem != null)
+                {
+                    EditItem = Clone(SelectedItem);
+                    if (EditItem != null)
+                        Action = Actions.Update;
+                }
+            }, (T? item) => { return SelectedItem != null; },
+                dependencies: (this, new[] { nameof(SelectedItem) })));
         }
 
-        RelayCommand<T> deleteCommand = null;
+        RelayCommand<T>? deleteCommand = null;
         public RelayCommand<T> DeleteCommand
         {
-            get => deleteCommand ?? new RelayCommand<T>((T item) =>
+            get => deleteCommand ?? (deleteCommand = new RelayCommand<T>((T? item) =>
             {
                 if (item == null) item = SelectedItem;
+                if (item == null) return;
 
                 var notifyEventArg = new NotificationEventArg<T>() { Item = item };
 
@@ -87,16 +91,18 @@ namespace Sysne.Core.MVVM.Pattern
 
                 ItemDeleted?.Invoke(this, notifyEventArg);
 
-            }, (T item) => { return SelectedItem != null; }
-            , dependencies: (this, new[] { nameof(SelectedItem) }));
+            }, (T? item) => { return SelectedItem != null; }
+            , dependencies: (this, new[] { nameof(SelectedItem) })));
         }
 
-        RelayCommand<T> saveCommand = null;
+        RelayCommand<T>? saveCommand = null;
         public RelayCommand<T> SaveCommand
         {
-            get => saveCommand ?? new RelayCommand<T>((T item) =>
+            get => saveCommand ?? (saveCommand = new RelayCommand<T>((T? item) =>
             {
                 if (item == null) item = EditItem;
+                if (item == null) return;
+                
                 EditItem = item;
                 switch (Action)
                 {
@@ -115,26 +121,26 @@ namespace Sysne.Core.MVVM.Pattern
                 EditItem = default;
                 Action = Actions.None;
                 //ReadCommand.Execute();
-            }, (T item) =>
+            }, (T? item) =>
             {
                 return EditItem != null;
-            });
+            }));
         }
 
-        RelayCommand cancelCommand = null;
+        RelayCommand? cancelCommand = null;
         public RelayCommand CancelCommand
         {
-            get => cancelCommand ?? new RelayCommand(() =>
+            get => cancelCommand ?? (cancelCommand = new RelayCommand(() =>
             {
                 EditItem = default;
                 Action = Actions.None;
-            }, () => { return true; });
+            }, () => { return true; }));
         }
         #endregion
 
         #region Delegates
-        protected delegate T UpdateDelegate(T editItem);
-        protected UpdateDelegate Update;
+        protected delegate T? UpdateDelegate(T editItem);
+        protected UpdateDelegate? Update;
         #endregion
 
 

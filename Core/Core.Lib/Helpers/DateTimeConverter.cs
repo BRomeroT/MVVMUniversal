@@ -45,7 +45,7 @@ namespace Core.Helpers
         /// <param name="obj">Objeto al que se aplica la conversión de valor.</param>
         /// <param name="timeZone">Tipo de conversión de fecha y hora.</param>
         /// <returns>Tipo de dato genérico.</returns>
-        public static T ChangeOutDateTime<T>(this T obj, DateTimeZones timeZone)
+        public static T? ChangeOutDateTime<T>(this T? obj, DateTimeZones timeZone)
         {
             if (obj == null) return obj;
             Type objType = obj.GetType();
@@ -54,9 +54,9 @@ namespace Core.Helpers
             else if (objType == typeof(DateTime) || objType == typeof(DateTime?))
             {
                 if (DateTimeZones.ToLocal == timeZone)
-                    return (T)Convert.ChangeType((obj as DateTime?).Value.ToLocalTime(), objType);
+                    return (T)Convert.ChangeType(((DateTime)(object)obj!).ToLocalTime(), objType);
                 else if (DateTimeZones.ToUTC == timeZone)
-                    return (T)Convert.ChangeType((obj as DateTime?).Value.ToUniversalTime(), objType);
+                    return (T)Convert.ChangeType(((DateTime)(object)obj!).ToUniversalTime(), objType);
                 else
                 {
                     //Mejorar cuando requiera personalizar la zona horaria
@@ -66,9 +66,12 @@ namespace Core.Helpers
             else if (typeof(IEnumerable).IsAssignableFrom(objType))
             {
                 var childs = obj as IEnumerable;
-                foreach (var child in childs)
+                if (childs != null)
                 {
-                    child.ChangeInTimeZone(timeZone);
+                    foreach (var child in childs)
+                    {
+                        child?.ChangeInTimeZone(timeZone);
+                    }
                 }
                 return obj;
             }
@@ -77,14 +80,14 @@ namespace Core.Helpers
                 var properties = objType.GetProperties().Where(p => !typesExclude.Contains(p.PropertyType));
                 foreach (PropertyInfo prop in properties)
                 {
-                    object value = prop.GetValue(obj, null);
+                    object? value = prop.GetValue(obj, null);
                     if (value == null) continue;
 
                     var elements = value as IEnumerable;
                     bool hasElements = prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(List<>) && elements != null;
                     if (hasElements)
-                        foreach (var element in elements)
-                            element.ChangeOutDateTime(timeZone);
+                        foreach (var element in elements!)
+                            element?.ChangeOutDateTime(timeZone);
                     else if (value != null && (prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?)))
                     {
                         if (timeZone == DateTimeZones.ToLocal)
@@ -94,7 +97,7 @@ namespace Core.Helpers
                         else if (timeZone == DateTimeZones.Custom)
                             prop.SetValue(obj, ((DateTime)value).ToUniversalTime());
                     }
-                    else if (prop.DeclaringType.IsClass)
+                    else if (prop.DeclaringType?.IsClass == true)
                         value.ChangeOutDateTime(timeZone);
                 }
                 return obj;
@@ -107,7 +110,7 @@ namespace Core.Helpers
         /// <typeparam name="T">Tipo de dato.</typeparam>
         /// <param name="obj">Objeto al que se aplica la conversión de valor.</param>
         /// <param name="timeConvertion">Tipo de conversión de fecha y hora.</param>
-        public static void ChangeInTimeZone<T>(this T obj, DateTimeZones timeConvertion)
+        public static void ChangeInTimeZone<T>(this T? obj, DateTimeZones timeConvertion)
         {
             if (obj == null) return;
             try
@@ -118,9 +121,12 @@ namespace Core.Helpers
                 else if (typeof(IEnumerable).IsAssignableFrom(objType))
                 {
                     var childs = obj as IEnumerable;
-                    foreach (var child in childs)
+                    if (childs != null)
                     {
-                        child.ChangeInTimeZone(timeConvertion);
+                        foreach (var child in childs)
+                        {
+                            child?.ChangeInTimeZone(timeConvertion);
+                        }
                     }
                 }
                 else
@@ -128,24 +134,28 @@ namespace Core.Helpers
                     var properties = objType.GetProperties().Where(p => !typesExclude.Contains(p.PropertyType));
                     foreach (PropertyInfo prop in properties)
                     {
-                        object value = prop.GetValue(obj, null);
+                        object? value = prop.GetValue(obj, null);
                         if (value == null) continue;
 
                         var elements = value as IEnumerable;
                         bool hasElements = prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(List<>) && elements != null;
                         if (hasElements)
-                            foreach (var element in elements)
-                                element.ChangeInTimeZone(timeConvertion);
+                            foreach (var element in elements!)
+                                element?.ChangeInTimeZone(timeConvertion);
                         else if (value != null && (prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?)))
                         {
+                            DateTime dateTimeValue = prop.PropertyType == typeof(DateTime?) 
+                                ? ((DateTime?)value).Value 
+                                : (DateTime)value;
+                                
                             if (timeConvertion == DateTimeZones.ToLocal)
-                                prop.SetValue(obj, ((DateTime)value).ToLocalTime());
+                                prop.SetValue(obj, dateTimeValue.ToLocalTime());
                             else if (timeConvertion == DateTimeZones.ToUTC)
-                                prop.SetValue(obj, ((DateTime)value).ToUniversalTime());
+                                prop.SetValue(obj, dateTimeValue.ToUniversalTime());
                             else if (timeConvertion == DateTimeZones.Custom)
-                                prop.SetValue(obj, ((DateTime)value).ToUniversalTime());
+                                prop.SetValue(obj, dateTimeValue.ToUniversalTime());
                         }
-                        else if (prop.DeclaringType.IsClass)
+                        else if (prop.DeclaringType?.IsClass == true)
                             value.ChangeInTimeZone(timeConvertion);
                     }
                 }
@@ -161,8 +171,10 @@ namespace Core.Helpers
         /// <typeparam name="T">Tipo de dato.</typeparam>
         /// <param name="tuple">Tupla.</param>
         /// <param name="timeConvertion">Tipo de conversión de fecha y hora.</param>
-        public static void ChangeTupleTimeZone<T>(this T tuple, DateTimeZones timeConvertion)
+        public static void ChangeTupleTimeZone<T>(this T? tuple, DateTimeZones timeConvertion)
         {
+            if (tuple == null) return;
+            
             var fieldsWithTuples = tuple
                 .GetType()
                 .GetFields(BindingFlags.NonPublic |
@@ -172,7 +184,7 @@ namespace Core.Helpers
                            BindingFlags.FlattenHierarchy);
 
             foreach (var field in fieldsWithTuples)
-                field.GetValue(tuple).ChangeInTimeZone(timeConvertion);
+                field.GetValue(tuple)?.ChangeInTimeZone(timeConvertion);
         }
     }
 }

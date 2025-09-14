@@ -36,15 +36,18 @@ namespace Sysne.Core.ApiClient
         }
 
         public string UrlBaseWebApi { get; set; } = string.Empty;
-        string urlController;
-        protected string UrlController
+        string? urlController;
+        protected string? UrlController
         {
             get => urlController;
             set
             {
-                urlController = !value.EndsWith("/") ? value + "/" : value;
-                UrlBaseWebApi += (!UrlBaseWebApi.EndsWith("/") ? "/" : string.Empty) + urlController;
-                BaseAddress = new Uri(UrlBaseWebApi);
+                if (value != null)
+                {
+                    urlController = !value.EndsWith("/") ? value + "/" : value;
+                    UrlBaseWebApi += (!UrlBaseWebApi.EndsWith("/") ? "/" : string.Empty) + urlController;
+                    BaseAddress = new Uri(UrlBaseWebApi);
+                }
             }
         }
 
@@ -62,7 +65,7 @@ namespace Sysne.Core.ApiClient
         /// </summary>
         /// <param name="sb">StringBuilder donde se concatenan los parametros.</param>
         /// <param name="param">Tupla de parametros.</param>
-        public void FormatingParameter(StringBuilder sb, (string, object) param)
+        public void FormatingParameter(StringBuilder sb, (string, object?) param)
         {
             if (param.Item2 != null && param.Item2.GetType() == typeof(DateTime))
                 sb.Append($"{param.Item1}={(DateTime)param.Item2:yyyy-MM-dd HH:mm:ss}&");
@@ -84,7 +87,7 @@ namespace Sysne.Core.ApiClient
             }
         }
 
-        private async Task<(HttpStatusCode StatusCode, TResponse Content)> ProcessResponse<TResponse>(HttpRequestMessage requestMessage)
+        private async Task<(HttpStatusCode StatusCode, TResponse? Content)> ProcessResponse<TResponse>(HttpRequestMessage requestMessage)
         {
             try
             {
@@ -100,7 +103,7 @@ namespace Sysne.Core.ApiClient
                 //}
 
                 var response = await res.Content.ReadFromJsonAsync<TResponse>();
-                response.ChangeInTimeZone(DateTimeZones.ToLocal);
+                response?.ChangeInTimeZone(DateTimeZones.ToLocal);
                 return (res.StatusCode, response);
 
             }
@@ -111,28 +114,28 @@ namespace Sysne.Core.ApiClient
             }
         }
 
-        public async Task<HttpStatusCode> CallAsync(HttpMethod method, string url, HttpContent content = null)
+        public async Task<HttpStatusCode> CallAsync(HttpMethod method, string url, HttpContent? content = null)
         {
             using var requestMessage = new HttpRequestMessage(method, url);
-            if (!requestMessage.RequestUri.IsAbsoluteUri)
+            if (!requestMessage.RequestUri!.IsAbsoluteUri)
                 requestMessage.RequestUri = new Uri(UrlBaseWebApi + url);
             if (content != null) requestMessage.Content = content;
             return await ProcessResponse(requestMessage);
         }
 
-        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallAsync<TResponse>(HttpMethod method, string url, HttpContent content = null)
+        public async Task<(HttpStatusCode StatusCode, TResponse? Content)> CallAsync<TResponse>(HttpMethod method, string url, HttpContent? content = null)
         {
             using var requestMessage = new HttpRequestMessage(method, url);
-            if (!requestMessage.RequestUri.IsAbsoluteUri)
+            if (!requestMessage.RequestUri!.IsAbsoluteUri)
                 requestMessage.RequestUri = new Uri(UrlBaseWebApi + url);
             if (content != null) requestMessage.Content = content;
             return await ProcessResponse<TResponse>(requestMessage);
         }
 
-        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallGetAsync<TResponse>(string url) =>
+        public async Task<(HttpStatusCode StatusCode, TResponse? Content)> CallGetAsync<TResponse>(string url) =>
             await CallAsync<TResponse>(HttpMethod.Get, url);
 
-        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallGetAsync<TResponse>(string url, params (string, object)[] parameters)
+        public async Task<(HttpStatusCode StatusCode, TResponse? Content)> CallGetAsync<TResponse>(string url, params (string, object?)[] parameters)
         {
             var sb = new StringBuilder();
             if (parameters.Length > 0)
@@ -140,7 +143,7 @@ namespace Sysne.Core.ApiClient
                 sb.Append("?");
                 foreach (var param in parameters)
                 {
-                    var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
+                    var tmp = param.Item2?.ChangeOutDateTime(DateTimeZones.ToUTC);
                     FormatingParameter(sb, (param.Item1, tmp));
                 }
                 sb.Remove(sb.Length - 1, 1);
@@ -148,13 +151,13 @@ namespace Sysne.Core.ApiClient
             return await CallAsync<TResponse>(HttpMethod.Get, $"{url}{sb}");
         }
 
-        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallPostAsync<TRequest, TResponse>(string url, TRequest req)
+        public async Task<(HttpStatusCode StatusCode, TResponse? Content)> CallPostAsync<TRequest, TResponse>(string url, TRequest req)
         {
-            req.ChangeOutDateTime(DateTimeZones.ToUTC);
+            req?.ChangeOutDateTime(DateTimeZones.ToUTC);
             return await CallAsync<TResponse>(HttpMethod.Post, url, JsonContent.Create(req));
         }
 
-        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallPostAsync<TResponse>(string url, params (string, object)[] parameters)
+        public async Task<(HttpStatusCode StatusCode, TResponse? Content)> CallPostAsync<TResponse>(string url, params (string, object?)[] parameters)
         {
             var sb = new StringBuilder();
             if (parameters.Length > 0)
@@ -162,7 +165,7 @@ namespace Sysne.Core.ApiClient
                 sb.Append("?");
                 foreach (var param in parameters)
                 {
-                    var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
+                    var tmp = param.Item2?.ChangeOutDateTime(DateTimeZones.ToUTC);
                     FormatingParameter(sb, (param.Item1, tmp));
                 }
                 sb.Remove(sb.Length - 1, 1);
@@ -172,11 +175,11 @@ namespace Sysne.Core.ApiClient
 
         public async Task<HttpStatusCode> CallPostAsync<TRequest>(string url, TRequest req)
         {
-            req.ChangeOutDateTime(DateTimeZones.ToUTC);
+            req?.ChangeOutDateTime(DateTimeZones.ToUTC);
             return await CallAsync(HttpMethod.Post, url, JsonContent.Create(req));
         }
 
-        public async Task<HttpStatusCode> CallPostAsync(string url, params (string, object)[] parameters)
+        public async Task<HttpStatusCode> CallPostAsync(string url, params (string, object?)[] parameters)
         {
             var sb = new StringBuilder();
             if (parameters.Length > 0)
@@ -184,7 +187,7 @@ namespace Sysne.Core.ApiClient
                 sb.Append("?");
                 foreach (var param in parameters)
                 {
-                    var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
+                    var tmp = param.Item2?.ChangeOutDateTime(DateTimeZones.ToUTC);
                     FormatingParameter(sb, (param.Item1, tmp));
                 }
                 sb.Remove(sb.Length - 1, 1);
@@ -192,21 +195,21 @@ namespace Sysne.Core.ApiClient
             return await CallAsync(HttpMethod.Post, $"{url}{sb}");
         }
 
-        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallPutAsync<TRequest, TResponse>(string url, TRequest req)
+        public async Task<(HttpStatusCode StatusCode, TResponse? Content)> CallPutAsync<TRequest, TResponse>(string url, TRequest req)
         {
-            req.ChangeOutDateTime(DateTimeZones.ToUTC);
+            req?.ChangeOutDateTime(DateTimeZones.ToUTC);
             return await CallAsync<TResponse>(HttpMethod.Put, url, JsonContent.Create(req));
         }
 
         public async Task<HttpStatusCode> CallPutAsync<TRequest>(string url, TRequest req)
         {
-            req.ChangeOutDateTime(DateTimeZones.ToUTC);
+            req?.ChangeOutDateTime(DateTimeZones.ToUTC);
             return await CallAsync(HttpMethod.Put, url, JsonContent.Create(req));
         }
 
-        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallDeleteAsync<TResponse>(string url) =>
+        public async Task<(HttpStatusCode StatusCode, TResponse? Content)> CallDeleteAsync<TResponse>(string url) =>
             await CallAsync<TResponse>(HttpMethod.Delete, url);
-        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallDeleteAsync<TResponse>(string url, params (string, object)[] parameters)
+        public async Task<(HttpStatusCode StatusCode, TResponse? Content)> CallDeleteAsync<TResponse>(string url, params (string, object?)[] parameters)
         {
             var sb = new StringBuilder();
             if (parameters.Length > 0)
@@ -214,7 +217,7 @@ namespace Sysne.Core.ApiClient
                 sb.Append("?");
                 foreach (var param in parameters)
                 {
-                    var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
+                    var tmp = param.Item2?.ChangeOutDateTime(DateTimeZones.ToUTC);
                     FormatingParameter(sb, (param.Item1, tmp));
                 }
                 sb.Remove(sb.Length - 1, 1);
@@ -224,7 +227,7 @@ namespace Sysne.Core.ApiClient
 
         public async Task<HttpStatusCode> CallDeleteAsync(string url) =>
            await CallAsync(HttpMethod.Delete, url);
-        public async Task<HttpStatusCode> CallDeleteAsync(string url, params (string, object)[] parameters)
+        public async Task<HttpStatusCode> CallDeleteAsync(string url, params (string, object?)[] parameters)
         {
             var sb = new StringBuilder();
             if (parameters.Length > 0)
@@ -232,7 +235,7 @@ namespace Sysne.Core.ApiClient
                 sb.Append("?");
                 foreach (var param in parameters)
                 {
-                    var tmp = param.Item2.ChangeOutDateTime(DateTimeZones.ToUTC);
+                    var tmp = param.Item2?.ChangeOutDateTime(DateTimeZones.ToUTC);
                     FormatingParameter(sb, (param.Item1, tmp));
                 }
                 sb.Remove(sb.Length - 1, 1);
@@ -240,7 +243,7 @@ namespace Sysne.Core.ApiClient
             return await CallAsync(HttpMethod.Delete, $"{url}{sb}");
         }
 
-        public async Task<(HttpStatusCode StatusCode, TResponse Content)> CallPostFileAsync<TResponse>(string url, byte[] file, string contentName, string fileName, string mediaType, HttpContent extraContent = null, string extraName = "")
+        public async Task<(HttpStatusCode StatusCode, TResponse? Content)> CallPostFileAsync<TResponse>(string url, byte[] file, string contentName, string fileName, string mediaType, HttpContent? extraContent = null, string extraName = "")
         {
             //http://stackoverflow.com/questions/16416601/c-sharp-httpclient-4-5-multipart-form-data-upload
             using var requestContent = new MultipartFormDataContent();
@@ -259,7 +262,11 @@ namespace Sysne.Core.ApiClient
     /// </summary>
     static class CertValidator
     {
+#if BROWSER
         internal static HttpClientHandler CertHandler { get; } = new HttpClientHandler();
+#else
+        internal static HttpClientHandler CertHandler { get; } = new HttpClientHandler();
+#endif
         static bool setServerCertificateCallback;
 
         [DebuggerStepThrough]
@@ -267,18 +274,21 @@ namespace Sysne.Core.ApiClient
         {
             if (setServerCertificateCallback) return;
             setServerCertificateCallback = true;
+            
+#if !BROWSER
             try
             {
-#if !BROWSER
                 if (CertHandler.ServerCertificateCustomValidationCallback == null)
                 {
                     CertHandler.ServerCertificateCustomValidationCallback = (m, cer, chain, e) => true;
                 }
-#endif
             }
-#pragma warning disable CA1031 // Only because for Blazor don't implments ServerCertificateCustomValidationCallback
-            catch { return; }
-#pragma warning restore CA1031 // Do not catch general exception types
+            catch 
+            { 
+                // Browser platforms don't support ServerCertificateCustomValidationCallback
+                return; 
+            }
+#endif
         }
     }
 }

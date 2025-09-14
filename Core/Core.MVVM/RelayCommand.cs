@@ -156,13 +156,13 @@ namespace Sysne.Core.MVVM
         /// <summary>
         /// Evento que se lanza al cambiar las reglas de negocio
         /// </summary>
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged;
         /// <summary>
         /// Función para evaluar si se cumplen las condiciones para ejecutar el comando
         /// </summary>
         /// <param name="parameter">Parámetro opcional del comando</param>
         /// <returns></returns>
-        public bool CanExecute(object parameter)
+        public bool CanExecute(object? parameter)
         {
             if (CanExecuteFuncGeneric != null)
             {
@@ -193,10 +193,10 @@ namespace Sysne.Core.MVVM
         /// Ejecuta el comando
         /// </summary>
         /// <param name="parameter">Parámetro opcional del comando</param>
-        public virtual async void Execute(object parameter)=>
+        public virtual async void Execute(object? parameter)=>
             await ExecuteAsync(parameter);
 
-        public virtual async Task ExecuteAsync(object parameter = null)
+        public virtual async Task ExecuteAsync(object? parameter = null)
         {
             Processing = true;
             Action?.Invoke();

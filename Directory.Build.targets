@@ -1,0 +1,17 @@
+<Project>
+  <!-- Configure JDK path for Xamarin Android projects to use JDK 17 -->
+  <PropertyGroup Condition="'$(ProjectTypeGuids)' != '' and $(ProjectTypeGuids.Contains('{EFBA0AD7-5A72-4C68-AF49-83D382785DCF}'))">
+    <!-- Force use of JDK 17 for Android projects to avoid JDK 21 compatibility issues -->
+    <JavaSdkDirectory>C:\Program Files (x86)\Android\openjdk\jdk-17.0.14</JavaSdkDirectory>
+  </PropertyGroup>
+  
+  <!-- Fix package version conflicts for Android projects -->
+  <ItemGroup Condition="'$(ProjectTypeGuids)' != '' and $(ProjectTypeGuids.Contains('{EFBA0AD7-5A72-4C68-AF49-83D382785DCF}')) and '$(MSBuildProjectName)' == 'XamarinApp.Android'">
+    <PackageReference Include="Xamarin.AndroidX.RecyclerView" Version="1.2.1.5" />
+  </ItemGroup>
+  
+  <!-- Suppress version conflict warnings for Android projects -->
+  <PropertyGroup Condition="'$(ProjectTypeGuids)' != '' and $(ProjectTypeGuids.Contains('{EFBA0AD7-5A72-4C68-AF49-83D382785DCF}'))">
+    <NoWarn>$(NoWarn);MSB3277</NoWarn>
+  </PropertyGroup>
+</Project>

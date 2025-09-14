@@ -39,7 +39,7 @@ namespace Sysne.Core.OS
         /// <summary>
         /// Registered dependency
         /// </summary>
-        static Dictionary<Type, (ServiceLifetime Lifetime, Type Type, (Func<object> ImplementationFactory, object Instance) Dependency)> Dependencies { get; set; } = new Dictionary<Type, (ServiceLifetime, Type, (Func<object>, object))>();
+        static Dictionary<Type, (ServiceLifetime Lifetime, Type Type, (Func<object>? ImplementationFactory, object? Instance) Dependency)> Dependencies { get; set; } = new Dictionary<Type, (ServiceLifetime, Type, (Func<object>?, object?))>();
 
         /// <summary>
         /// Registers a dependency with Lifetime, constructor implementation and/or instance
@@ -49,11 +49,11 @@ namespace Sysne.Core.OS
         /// <param name="lifetime">Lifetime for instance</param>
         /// <param name="implementationFactory">Function to get an instance</param>
         /// <param name="instance">Specific instance</param>
-        public static void Register<C, I>(ServiceLifetime lifetime = ServiceLifetime.Default, Func<object> implementationFactory = null, C instance = default) where C : class, I, new()
+        public static void Register<C, I>(ServiceLifetime lifetime = ServiceLifetime.Default, Func<object>? implementationFactory = null, C? instance = default) where C : class, I, new()
         {
             if (lifetime == ServiceLifetime.Default) lifetime = DefaultLifetime;
 
-            void Add((ServiceLifetime Lifetime, Type Type, (Func<object> ImplementationFactory, object Instance) Dependency) value)
+            void Add((ServiceLifetime Lifetime, Type Type, (Func<object>? ImplementationFactory, object? Instance) Dependency) value)
             {
                 value.Lifetime = lifetime;
                 value.Type = typeof(C);
@@ -79,7 +79,7 @@ namespace Sysne.Core.OS
         /// </summary>
         /// <typeparam name="C"></typeparam>
         /// <param name="instance"></param>
-        public static void Register<C>(C instance = default, Func<object> implementationFactory = null) where C : class, new()
+        public static void Register<C>(C? instance = default, Func<object>? implementationFactory = null) where C : class, new()
         {
             Register<C, C>(ServiceLifetime.Singleton, implementationFactory, instance);
         }
@@ -98,7 +98,7 @@ namespace Sysne.Core.OS
                     if (dep.Dependency.ImplementationFactory != null)
                         return (I)dep.Dependency.ImplementationFactory();
                     else
-                        return (I)Activator.CreateInstance(dep.Type);
+                        return (I)Activator.CreateInstance(dep.Type)!;
                 }
                 switch (dep.Lifetime)
                 {
@@ -112,7 +112,7 @@ namespace Sysne.Core.OS
                         return (I)dep.Dependency.Instance;
                     case ServiceLifetime.Transient:
                         return GetInstance();
-                    default: return default;
+                    default: return default!;
                 }
             }
             else

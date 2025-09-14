@@ -9,8 +9,8 @@ namespace WebAPI.Model
     {
         public int Id { get; set; }
         public int IdSection { get; set; }
-        public string Description { get; set; }
-        Section section = new Section();
+        public required string Description { get; set; }
+        Section section = new() { Name = "" };
         public Section Section
         {
             get => section;
