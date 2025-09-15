@@ -135,7 +135,3 @@ Examples in this repository:
 
 - To add another platform, implement `INavigationService` and `ISettingsStorage` for that platform and register them at startup.
 - Optionally add more app-level adapters (clipboard, file picker, telemetry) using the same pattern.
-
-## Support
-
-If you want, I can add minimal example code showing the login flow wired end-to-end for MAUI (View + ViewModel + Navigation registration) or create unit-test examples for Core.MVVM types.
