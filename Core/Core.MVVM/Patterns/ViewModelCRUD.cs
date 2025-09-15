@@ -21,7 +21,7 @@ namespace Codeland.Core.MVVM.Pattern
         public event EventHandler<NotificationEventArg<T>>? ItemDeleted;
         #endregion
 
-        private ObservableCollection<T> listItems = new ObservableCollection<T>();
+        private ObservableCollection<T> listItems = [];
         public ObservableCollection<T> ListItems { get => listItems; set => Set(ref listItems, value); }
 
         private T? selectedItem;
@@ -39,45 +39,45 @@ namespace Codeland.Core.MVVM.Pattern
         protected RelayCommand? readCommand = null;
         public virtual RelayCommand ReadCommand
         {
-            get => readCommand ?? (readCommand = new RelayCommand(() =>
+            get => readCommand ??= new RelayCommand(() =>
             {
 
-            }, () => { return true; }));
+            }, () => { return true; });
         }
 
         RelayCommand? createCommand = null;
         public RelayCommand CreateCommand
         {
-            get => createCommand ?? (createCommand = new RelayCommand(() =>
+            get => createCommand ??= new RelayCommand(() =>
             {
                 EditItem = new T();
                 Action = Actions.Create;
             }, () => { return Action != Actions.Create && Action != Actions.Update; }
-            , dependencies: (this, new[] { nameof(Action) })));
+            , dependencies: (this, new[] { nameof(Action) }));
         }
 
         RelayCommand<T>? editCommand = null;
         public RelayCommand<T> EditCommand
         {
-            get => editCommand ?? (editCommand = new RelayCommand<T>((T? item) =>
+            get => editCommand ??= new RelayCommand<T>(item =>
             {
-                SelectedItem = (item != null) ? item : SelectedItem;
+                SelectedItem = item ?? SelectedItem;
                 if (SelectedItem != null)
                 {
                     EditItem = Clone(SelectedItem);
                     if (EditItem != null)
                         Action = Actions.Update;
                 }
-            }, (T? item) => { return SelectedItem != null; },
-                dependencies: (this, new[] { nameof(SelectedItem) })));
+            }, item => { return SelectedItem != null; },
+                dependencies: (this, new[] { nameof(SelectedItem) }));
         }
 
         RelayCommand<T>? deleteCommand = null;
         public RelayCommand<T> DeleteCommand
         {
-            get => deleteCommand ?? (deleteCommand = new RelayCommand<T>((T? item) =>
+            get => deleteCommand ??= new RelayCommand<T>(item =>
             {
-                if (item == null) item = SelectedItem;
+                item ??= SelectedItem;
                 if (item == null) return;
 
                 var notifyEventArg = new NotificationEventArg<T>() { Item = item };
@@ -91,16 +91,16 @@ namespace Codeland.Core.MVVM.Pattern
 
                 ItemDeleted?.Invoke(this, notifyEventArg);
 
-            }, (T? item) => { return SelectedItem != null; }
-            , dependencies: (this, new[] { nameof(SelectedItem) })));
+            }, item => { return SelectedItem != null; }
+            , dependencies: (this, new[] { nameof(SelectedItem) }));
         }
 
         RelayCommand<T>? saveCommand = null;
         public RelayCommand<T> SaveCommand
         {
-            get => saveCommand ?? (saveCommand = new RelayCommand<T>((T? item) =>
+            get => saveCommand ??= new RelayCommand<T>(item =>
             {
-                if (item == null) item = EditItem;
+                item ??= EditItem;
                 if (item == null) return;
                 
                 EditItem = item;
@@ -121,20 +121,20 @@ namespace Codeland.Core.MVVM.Pattern
                 EditItem = default;
                 Action = Actions.None;
                 //ReadCommand.Execute();
-            }, (T? item) =>
+            }, (item) =>
             {
                 return EditItem != null;
-            }));
+            });
         }
 
         RelayCommand? cancelCommand = null;
         public RelayCommand CancelCommand
         {
-            get => cancelCommand ?? (cancelCommand = new RelayCommand(() =>
+            get => cancelCommand ??= new RelayCommand(() =>
             {
                 EditItem = default;
                 Action = Actions.None;
-            }, () => { return true; }));
+            }, () => { return true; });
         }
         #endregion
 

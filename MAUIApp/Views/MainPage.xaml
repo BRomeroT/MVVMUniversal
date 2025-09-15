@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Core.ViewModels"
+             x:Class="MAUIApp.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25"
+            x:DataType="vm:LoginViewModel">
+            <VerticalStackLayout.BindingContext>
+                <vm:LoginViewModel/>
+            </VerticalStackLayout.BindingContext>
+
+            <Label Text="User"/>
+            <Entry Text="{Binding User}"/>
+            <Label Text="Password"/>
+            <Entry Text="{Binding Password}" IsPassword="True"/>
+
+            <Label Text="{Binding ValidationSumary}" TextColor="Red" IsVisible="{Binding HasErrors}"/>
+
+            <Label Text="{Binding Messagge}"/>
+
+            <Button Text="Login" Command="{Binding LoginCommand}"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

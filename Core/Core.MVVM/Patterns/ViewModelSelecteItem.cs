@@ -7,12 +7,16 @@ using System.Threading.Tasks;
 
 namespace Codeland.Core.MVVM.Pattern
 {
-    public class ViewModelSelecteItem<T> : ObservableObject, ISelectedItem<T>
+    public partial class ViewModelSelecteItem<T> : ObservableObject, ISelectedItem<T>
     {
-        private ObservableCollection<T> selectionList = new ObservableCollection<T>();
+        private ObservableCollection<T> selectionList = [];
         public ObservableCollection<T> ListItems { get => selectionList; set => Set(ref selectionList, value); }
 
-        private T selectedItem;
-        public T SelectedItem { get => selectedItem; set => Set(ref selectedItem, value); }
+        private T? selectedItem;
+        public T? SelectedItem
+        {
+            get => selectedItem;
+            set => Set(ref selectedItem, value);
+        }
     }
 }

@@ -18,7 +18,6 @@ namespace Core.Lib.OS
 		Task PopModal();
 		/// <summary>Show a modal</summary>
 		/// <param name="pageKey"></param>
-		/// <param name="parameter"></param>
 		/// <returns></returns>
 		Task PushModal(string pageKey);
 		/// <summary>Navigate to a page without the page requiring any parameters</summary>

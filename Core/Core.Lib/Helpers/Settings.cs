@@ -9,7 +9,7 @@ namespace Core.Helpers
     public class Settings : ObservableObject
     {
         readonly ISettingsStorage settingsStorage;
-        private Settings() => settingsStorage = DependencyService.Get<ISettingsStorage>();
+        private Settings() => settingsStorage = Codeland.Core.OS.DependencyService.Get<ISettingsStorage>();
 
         [ThreadStatic]
         static Settings current;

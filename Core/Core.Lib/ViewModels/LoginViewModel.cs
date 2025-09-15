@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Core.ViewModels
 {
-    public class LoginViewModel : ViewModelWithBL<SecurityBL> //: ViewModelBase
+    public partial class LoginViewModel : ViewModelWithBL<SecurityBL> //: ViewModelBase
     {
         //readonly SecurityBL bl;
         //public LoginViewModel() => bl = new SecurityBL();
@@ -36,7 +36,7 @@ namespace Core.ViewModels
                 if (isValid)
                 {
                     Messagge = name;
-                    await DependencyService.Get<INavigationService>().NavigateTo(PagesKeys.Crud);
+                    await Codeland.Core.OS.DependencyService.Get<INavigationService>().NavigateTo(PagesKeys.Crud);
                 }
                 else
                 {

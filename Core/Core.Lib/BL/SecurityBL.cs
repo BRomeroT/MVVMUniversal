@@ -12,7 +12,7 @@ namespace Core.BL
         readonly SecurityApi api;
         public SecurityBL() => api = new SecurityApi();
 
-        public async Task<(bool IsValid, string Name)> Login(string user, string password)
+        public async Task<(bool IsValid, string? Name)> Login(string user, string password)
         {
             var (statusCode, name) = await api.Login(new SharedAPIModel.Credential()
             {
